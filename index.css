@@ -40,7 +40,10 @@ body{
     padding:18px;
 }
 .courtBox{
-    aspect-ratio:1.38/1;
+    aspect-ratio:520/1024;
+    width:100%;
+    max-width:520px;
+    margin:0 auto;
     background:var(--court);
     border-radius:14px;
     overflow:hidden;

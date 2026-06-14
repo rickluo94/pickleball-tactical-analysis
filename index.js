@@ -32,9 +32,21 @@ const lineRiskEl = document.getElementById('lineRisk');
 const crossRiskEl = document.getElementById('crossRisk');
 const suggestionEl = document.getElementById('suggestion');
 
-let incomingStart = {x:260,y:570};
-const rayLength = 600;
+const VIEWBOX_WIDTH = 520;
+const VIEWBOX_HEIGHT = 1024;
+const COURT_CENTER_X = 260;
+const DEFENDER_HOME = {x:260,y:796};
+const HIT_BOUNDS = {minX:65,maxX:455,minY:70,maxY:502};
+const BALL_BOUNDS = {minX:65,maxX:455,minY:532,maxY:954};
+const DEFENDER_BOUNDS = {minX:65,maxX:455,minY:680,maxY:954};
+
+let incomingStart = {x:149,y:909};
+const rayLength = 900;
 const fan = 20;
+
+function clamp(n, min, max){
+    return Math.max(min, Math.min(max, n));
+}
 
 function pointFrom(origin, deg, len){
     const rad = deg * Math.PI / 180;
@@ -52,11 +64,11 @@ function setLine(line, a, b){
 }
 
 function routeName(angle){
-    if(angle > 30) return '偏直線攻擊';
+    if(angle > 30) return '大角度對角攻擊';
     if(angle < -30) return '大角度對角攻擊';
-    if(angle > 10) return '中線偏直線';
-    if(angle < -10) return '中線偏對角';
-    return '中間壓迫';
+    if(angle > 10) return '中線偏左';
+    if(angle < -10) return '中線偏右';
+    return '正面回擊';
 }
 
 function pct(n){
@@ -80,7 +92,7 @@ function update(){
     hitPoint.setAttribute('transform', `translate(${hit.x},${hit.y})`);
     // 拍子已在 hitPoint 內，僅需處理旋轉
     paddle.setAttribute('transform', `rotate(${angle})`);
-    defender.setAttribute('transform', `translate(${def.x - 450},${def.y - 500})`);
+    defender.setAttribute('transform', `translate(${def.x - DEFENDER_HOME.x},${def.y - DEFENDER_HOME.y})`);
 
     setLine(incoming, incomingStart, hit);
 
@@ -106,12 +118,11 @@ function update(){
     routeText.textContent = name;
     routeNameEl.textContent = name;
 
-    const courtCenter = 450;
-    const attackSide = hit.x > courtCenter ? 1 : -1;
-    const defenderBias = (def.x - courtCenter) * attackSide;
+    const attackSide = hit.x > COURT_CENTER_X ? 1 : -1;
+    const defenderBias = (def.x - COURT_CENTER_X) * attackSide;
 
-    const lineRisk = pct(55 + angle * .75 + (hit.x - 450) * .05 - defenderBias * .08);
-    const crossRisk = pct(55 - angle * .75 + Math.abs(hit.x - 450) * .04 + defenderBias * .04);
+    const lineRisk = pct(55 + angle * .75 + (hit.x - COURT_CENTER_X) * .08 - defenderBias * .12);
+    const crossRisk = pct(55 - angle * .75 + Math.abs(hit.x - COURT_CENTER_X) * .07 + defenderBias * .06);
 
     lineRiskEl.textContent = lineRisk + '%';
     crossRiskEl.textContent = crossRisk + '%';
@@ -190,8 +201,8 @@ window.addEventListener('pointermove', (e) => {
 
     // 1. 取得 SVG 座標轉換比例
     const rect = courtSvg.getBoundingClientRect();
-    const svgX = (e.clientX - rect.left) * (900 / rect.width);
-    const svgY = (e.clientY - rect.top) * (650 / rect.height);
+    const svgX = (e.clientX - rect.left) * (VIEWBOX_WIDTH / rect.width);
+    const svgY = (e.clientY - rect.top) * (VIEWBOX_HEIGHT / rect.height);
 
     // 2. 取得目前的擊球點與來球起點
     const hit = { x: Number(hitXInput.value), y: Number(hitYInput.value) };
@@ -199,24 +210,24 @@ window.addEventListener('pointermove', (e) => {
 
     if (isDraggingBall) {
         // 處理球的位置拖曳，並限制在 Input 的範圍內
-        ballXInput.value = Math.max(110, Math.min(790, Math.round(svgX)));
-        ballYInput.value = Math.max(340, Math.min(610, Math.round(svgY)));
+        ballXInput.value = clamp(Math.round(svgX), BALL_BOUNDS.minX, BALL_BOUNDS.maxX);
+        ballYInput.value = clamp(Math.round(svgY), BALL_BOUNDS.minY, BALL_BOUNDS.maxY);
         update();
         return;
     }
 
     if (isDraggingDefender) {
         // 處理防守者位置拖曳，限制在防守區範圍內 (與 Input 設定一致)
-        defXInput.value = Math.max(110, Math.min(790, Math.round(svgX)));
-        defYInput.value = Math.max(430, Math.min(600, Math.round(svgY)));
+        defXInput.value = clamp(Math.round(svgX), DEFENDER_BOUNDS.minX, DEFENDER_BOUNDS.maxX);
+        defYInput.value = clamp(Math.round(svgY), DEFENDER_BOUNDS.minY, DEFENDER_BOUNDS.maxY);
         update();
         return;
     }
 
     if (isDraggingHit) {
         // 處理擊球點位置拖曳，限制在對手半場範圍內 (與 Input 設定一致)
-        hitXInput.value = Math.max(110, Math.min(790, Math.round(svgX)));
-        hitYInput.value = Math.max(55, Math.min(315, Math.round(svgY)));
+        hitXInput.value = clamp(Math.round(svgX), HIT_BOUNDS.minX, HIT_BOUNDS.maxX);
+        hitYInput.value = clamp(Math.round(svgY), HIT_BOUNDS.minY, HIT_BOUNDS.maxY);
         update();
         return;
     }

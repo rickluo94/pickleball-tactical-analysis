@@ -29,26 +29,26 @@
 
     <div class="content">
       <div class="courtBox">
-        <svg id="court" viewBox="0 0 900 650" style="touch-action: none;">
-          <rect x="0" y="0" width="900" height="650" fill="#6dbb6a"/>
-          <rect x="90" y="40" width="720" height="570" fill="none" stroke="white" stroke-width="5"/>
-          <line x1="90" y1="325" x2="810" y2="325" stroke="#222" stroke-width="6"/>
-          <line x1="90" y1="235" x2="810" y2="235" stroke="white" stroke-width="4"/>
-          <line x1="90" y1="415" x2="810" y2="415" stroke="white" stroke-width="4"/>
-          <line x1="450" y1="40" x2="450" y2="235" stroke="white" stroke-width="4"/>
-          <line x1="450" y1="415" x2="450" y2="610" stroke="white" stroke-width="4"/>
+        <svg id="court" viewBox="0 0 520 1024" style="touch-action: none;">
+          <rect x="0" y="0" width="520" height="1024" fill="#6dbb6a"/>
+          <rect x="50" y="50" width="420" height="924" fill="none" stroke="white" stroke-width="5"/>
+          <line x1="50" y1="512" x2="470" y2="512" stroke="#222" stroke-width="6"/>
+          <line x1="50" y1="365" x2="470" y2="365" stroke="white" stroke-width="4"/>
+          <line x1="50" y1="659" x2="470" y2="659" stroke="white" stroke-width="4"/>
+          <line x1="260" y1="50" x2="260" y2="365" stroke="white" stroke-width="4"/>
+          <line x1="260" y1="659" x2="260" y2="974" stroke="white" stroke-width="4"/>
 
-          <text x="820" y="331" font-size="18" fill="#222">Net</text>
-          <text x="108" y="224" font-size="16" fill="white">Kitchen Line</text>
-          <text x="108" y="437" font-size="16" fill="white">Kitchen Line</text>
+          <text x="478" y="518" font-size="18" fill="#222">Net</text>
+          <text x="62" y="354" font-size="16" fill="white">Kitchen Line</text>
+          <text x="62" y="681" font-size="16" fill="white">Kitchen Line</text>
 
           <!-- 可攻擊扇形 -->
           <path id="fanArea" fill="rgba(167,227,109,.28)" stroke="rgba(122,201,67,.35)" stroke-width="2" style="cursor: move; pointer-events: auto; touch-action: none;"></path>
 
           <!-- 來球方向 -->
-          <line id="incoming" x1="260" y1="570" x2="600" y2="170" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
-          <circle id="incomingDot" cx="260" cy="570" r="20" fill="#111827" style="cursor: move; pointer-events: auto; touch-action: none;"/>
-          <text id="incomingText" x="275" y="545" font-size="18" fill="#111827">來球方向</text>
+          <line id="incoming" x1="149" y1="909" x2="348" y2="261" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+          <circle id="incomingDot" cx="149" cy="909" r="20" fill="#111827" style="cursor: move; pointer-events: auto; touch-action: none;"/>
+          <text id="incomingText" x="164" y="884" font-size="18" fill="#111827">來球方向</text>
 
           <!-- 攻擊路徑 -->
           <line id="leftRay" stroke="#a7e36d" stroke-width="4" stroke-dasharray="8 8"/>
@@ -57,8 +57,8 @@
 
           <!-- 防守者站位 -->
           <g id="defender" style="cursor: move; pointer-events: auto; touch-action: none;">
-            <circle cx="450" cy="500" r="20" fill="#2563eb"/>
-            <text x="473" y="506" font-size="17" font-weight="800" fill="#2563eb">防守站位</text>
+            <circle cx="260" cy="796" r="20" fill="#2563eb"/>
+            <text x="283" y="802" font-size="17" font-weight="800" fill="#2563eb">防守站位</text>
           </g>
 
           <!-- 對手拍子與擊球點 -->
@@ -73,7 +73,7 @@
             <line x1="20" y1="-20" x2="-20" y2="20" stroke="#1f2933" stroke-width="5" stroke-linecap="round"/>
             <text x="22" y="-8" font-size="18" font-weight="700" fill="#1f2933">擊球點 X</text>
           </g>
-          <text id="routeText" x="610" y="230" font-size="20" font-weight="900" fill="#1f2933"></text>
+          <text id="routeText" x="332" y="360" font-size="20" font-weight="900" fill="#1f2933"></text>
         </svg>
       </div>
 
@@ -82,30 +82,30 @@
           <label>拍面角度 <span class="num"><span id="angleText">0</span>°</span></label>
           <input id="angle" type="range" min="-55" max="55" value="0" />
           <div class="btns">
-            <button onclick="setAngle(-35)">偏對角</button>
+            <button onclick="setAngle(-35)">偏左對角</button>
             <button onclick="setAngle(0)">打中間</button>
-            <button onclick="setAngle(35)">偏直線</button>
+            <button onclick="setAngle(35)">偏右對角</button>
             <button class="secondary" onclick="animateDemo()">自動示範</button>
           </div>
         </div>
 
         <div class="group">
-          <label>對手拍子 X 軸 <span class="num"><span id="xText">600</span></span></label>
-          <input id="hitX" type="range" min="110" max="790" value="600" />
-          <label>對手拍子 Y 軸 <span class="num"><span id="yText">170</span></span></label>
-          <input id="hitY" type="range" min="55" max="315" value="170" />
+          <label>對手拍子 X 軸 <span class="num"><span id="xText">348</span></span></label>
+          <input id="hitX" type="range" min="65" max="455" value="348" />
+          <label>對手拍子 Y 軸 <span class="num"><span id="yText">261</span></span></label>
+          <input id="hitY" type="range" min="70" max="502" value="261" />
         </div>
 
         <div class="group">
-          <label>來球 X 軸 <span class="num"><span id="ballXText">260</span></span></label>
-<input id="ballX" type="range" min="110" max="790" value="260" />
-<label>來球 Y 軸 <span class="num"><span id="ballYText">570</span></span></label>
-<input id="ballY" type="range" min="340" max="610" value="570" />
+          <label>來球 X 軸 <span class="num"><span id="ballXText">149</span></span></label>
+<input id="ballX" type="range" min="65" max="455" value="149" />
+<label>來球 Y 軸 <span class="num"><span id="ballYText">909</span></span></label>
+<input id="ballY" type="range" min="532" max="954" value="909" />
 
-<label>防守站位 X 軸 <span class="num"><span id="defXText">450</span></span></label>
-          <input id="defX" type="range" min="110" max="790" value="450" />
-          <label>防守站位 Y 軸 <span class="num"><span id="defYText">500</span></span></label>
-          <input id="defY" type="range" min="430" max="600" value="500" />
+<label>防守站位 X 軸 <span class="num"><span id="defXText">260</span></span></label>
+          <input id="defX" type="range" min="65" max="455" value="260" />
+          <label>防守站位 Y 軸 <span class="num"><span id="defYText">796</span></span></label>
+          <input id="defY" type="range" min="680" max="954" value="796" />
         </div>
 
         <div class="group">
@@ -123,11 +123,11 @@
             <span id="routeName">中間壓迫</span>
           </div>
           <div class="card">
-            <strong>直線威脅</strong>
+            <strong>左側威脅</strong>
             <span class="risk" id="lineRisk">--</span>
           </div>
           <div class="card">
-            <strong>對角威脅</strong>
+            <strong>右側威脅</strong>
             <span class="risk" id="crossRisk">--</span>
           </div>
           <div class="card">
