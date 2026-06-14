@@ -23,6 +23,7 @@ const defRangeText = document.getElementById('defRangeText');
 const hitPoint = document.getElementById('hitPoint');
 const paddle = document.getElementById('paddle');
 const defender = document.getElementById('defender');
+const opponentEl = document.getElementById('opponent');
 
 const incoming = document.getElementById('incoming');
 const incomingDot = document.getElementById('incomingDot');
@@ -48,13 +49,16 @@ const VIEWBOX_WIDTH = 520;
 const VIEWBOX_HEIGHT = 1024;
 const COURT_CENTER_X = 260;
 const DEFENDER_HOME = {x:260,y:796};
+const OPPONENT_HOME = {x:110,y:120};
 const HIT_BOUNDS = {minX:65,maxX:455,minY:70,maxY:502};
 const BALL_BOUNDS = {minX:65,maxX:455,minY:532,maxY:954};
-const DEFENDER_BOUNDS = {minX:65,maxX:455,minY:680,maxY:954};
-const ATTACK_RANGE_BOUNDS = {min:160,max:780};
-const DEF_RANGE_BOUNDS = {min:120,max:700};
+const DEFENDER_BOUNDS = {minX:65,maxX:455,minY:532,maxY:954};
+const OPPONENT_BOUNDS = {minX:65,maxX:455,minY:70,maxY:502};
+const ATTACK_RANGE_BOUNDS = {min:120,max:1200};
+const DEF_RANGE_BOUNDS = {min:120,max:1200};
 
 let incomingStart = {x:149,y:909};
+let opponent = {...OPPONENT_HOME};
 const fan = 20;
 const defFan = 28;
 const defAngleLimit = 80;
@@ -125,6 +129,7 @@ function update(){
     // 拍子已在 hitPoint 內，僅需處理旋轉
     paddle.setAttribute('transform', `rotate(${angle})`);
     defender.setAttribute('transform', `translate(${def.x - DEFENDER_HOME.x},${def.y - DEFENDER_HOME.y})`);
+    opponentEl.setAttribute('transform', `translate(${opponent.x - OPPONENT_HOME.x},${opponent.y - OPPONENT_HOME.y})`);
 
     setLine(incoming, incomingStart, hit);
 
@@ -214,6 +219,7 @@ let isDraggingHit = false;
 let isDraggingDefFan = false;
 let isDraggingAttackRange = false;
 let isDraggingDefRange = false;
+let isDraggingOpponent = false;
 const courtSvg = document.getElementById('court');
 
 fanArea.addEventListener('pointerdown', (e) => {
@@ -260,6 +266,13 @@ defender.addEventListener('pointerdown', (e) => {
     e.preventDefault();
 });
 
+opponentEl.addEventListener('pointerdown', (e) => {
+    isDraggingOpponent = true;
+    opponentEl.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
 hitPoint.addEventListener('pointerdown', (e) => {
     isDraggingHit = true;
     hitPoint.setPointerCapture(e.pointerId);
@@ -268,7 +281,7 @@ hitPoint.addEventListener('pointerdown', (e) => {
 });
 
 window.addEventListener('pointermove', (e) => {
-    if (!isDragging && !isDraggingBall && !isDraggingDefender && !isDraggingHit && !isDraggingDefFan && !isDraggingAttackRange && !isDraggingDefRange) return;
+    if (!isDragging && !isDraggingBall && !isDraggingDefender && !isDraggingHit && !isDraggingDefFan && !isDraggingAttackRange && !isDraggingDefRange && !isDraggingOpponent) return;
 
     // 1. 取得 SVG 座標轉換比例
     const rect = courtSvg.getBoundingClientRect();
@@ -293,6 +306,15 @@ window.addEventListener('pointermove', (e) => {
         // 處理防守者位置拖曳，限制在防守區範圍內 (與 Input 設定一致)
         defXInput.value = clamp(Math.round(svgX), DEFENDER_BOUNDS.minX, DEFENDER_BOUNDS.maxX);
         defYInput.value = clamp(Math.round(svgY), DEFENDER_BOUNDS.minY, DEFENDER_BOUNDS.maxY);
+        update();
+        return;
+    }
+
+    if (isDraggingOpponent) {
+        opponent = {
+            x: clamp(Math.round(svgX), OPPONENT_BOUNDS.minX, OPPONENT_BOUNDS.maxX),
+            y: clamp(Math.round(svgY), OPPONENT_BOUNDS.minY, OPPONENT_BOUNDS.maxY)
+        };
         update();
         return;
     }
@@ -368,6 +390,10 @@ window.addEventListener('pointerup', (e) => {
         isDraggingDefender = false;
         defender.releasePointerCapture(e.pointerId);
         document.body.style.overflow = '';
+    } else if (isDraggingOpponent) {
+        isDraggingOpponent = false;
+        opponentEl.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
     } else if (isDraggingHit) {
         isDraggingHit = false;
         hitPoint.releasePointerCapture(e.pointerId);
@@ -376,7 +402,7 @@ window.addEventListener('pointerup', (e) => {
 });
 
 window.addEventListener('pointercancel', (e) => {
-    if (isDragging || isDraggingBall || isDraggingDefender || isDraggingHit || isDraggingDefFan || isDraggingAttackRange || isDraggingDefRange) {
+    if (isDragging || isDraggingBall || isDraggingDefender || isDraggingHit || isDraggingDefFan || isDraggingAttackRange || isDraggingDefRange || isDraggingOpponent) {
         isDragging = false;
         isDraggingBall = false;
         isDraggingDefender = false;
@@ -384,6 +410,7 @@ window.addEventListener('pointercancel', (e) => {
         isDraggingDefFan = false;
         isDraggingAttackRange = false;
         isDraggingDefRange = false;
+        isDraggingOpponent = false;
         document.body.style.overflow = '';
     }
 });

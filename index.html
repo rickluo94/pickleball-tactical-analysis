@@ -7,8 +7,8 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <title>【JINHOPA】匹克球戰術分析工具｜拍面角度與攻擊路徑</title>
-<link rel="stylesheet" href="index.css?v=202606142152" />
-<script src="index.js?v=202606142152" defer></script>
+<link rel="stylesheet" href="index.css?v=202606142204" />
+<script src="index.js?v=202606142204" defer></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-9EN1F98JYX"></script>
 <script>
@@ -44,6 +44,12 @@
           <text x="478" y="518" font-size="18" fill="#222">Net</text>
           <text x="62" y="354" font-size="16" fill="white">Kitchen Line</text>
           <text x="62" y="681" font-size="16" fill="white">Kitchen Line</text>
+
+          <!-- 對手站位 -->
+          <g id="opponent" style="cursor: move; pointer-events: auto; touch-action: none;">
+            <circle cx="110" cy="120" r="18" fill="#ef4444"/>
+            <text x="134" y="126" font-size="17" font-weight="800" fill="#ef4444">對手</text>
+          </g>
 
           <!-- 可攻擊扇形 -->
           <path id="fanArea" fill="rgba(167,227,109,.28)" stroke="rgba(122,201,67,.35)" stroke-width="2" style="cursor: move; pointer-events: auto; touch-action: none;"></path>
@@ -93,7 +99,7 @@
           <label>拍面角度 <span class="num"><span id="angleText">0</span>°</span></label>
           <input id="angle" type="range" min="-55" max="55" value="0" />
           <label>攻擊範圍長度 <span class="num"><span id="attackRangeText">680</span></span></label>
-          <input id="attackRange" type="range" min="160" max="780" value="680" />
+          <input id="attackRange" type="range" min="160" max="1200" value="680" />
           <div class="btns">
             <button onclick="setAngle(-35)">偏右回擊</button>
             <button onclick="setAngle(0)">正面回擊</button>
@@ -118,11 +124,11 @@
 <label>防守站位 X 軸 <span class="num"><span id="defXText">260</span></span></label>
           <input id="defX" type="range" min="65" max="455" value="260" />
           <label>防守站位 Y 軸 <span class="num"><span id="defYText">796</span></span></label>
-          <input id="defY" type="range" min="680" max="954" value="796" />
+          <input id="defY" type="range" min="532" max="954" value="796" />
           <label>防守角度 <span class="num"><span id="defAngleText">0</span>°</span></label>
           <input id="defAngle" type="range" min="-80" max="80" value="0" />
           <label>防守範圍長度 <span class="num"><span id="defRangeText">410</span></span></label>
-          <input id="defRange" type="range" min="120" max="700" value="410" />
+          <input id="defRange" type="range" min="120" max="1200" value="410" />
         </div>
 
         <div class="group">
@@ -132,6 +138,7 @@
             <div class="item"><span class="dot" style="background:#a7e36d"></span>可攻擊範圍</div>
             <div class="item"><span class="dot" style="background:#2563eb"></span>防守站位</div>
             <div class="item"><span class="dot" style="background:#60a5fa"></span>防守覆蓋範圍</div>
+            <div class="item"><span class="dot" style="background:#ef4444"></span>對手</div>
           </div>
         </div>
 
