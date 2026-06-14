@@ -78,7 +78,8 @@ function update(){
     ballYText.textContent=incomingStart.y;
 
     hitPoint.setAttribute('transform', `translate(${hit.x},${hit.y})`);
-    paddle.setAttribute('transform', `translate(${hit.x},${hit.y}) rotate(${angle})`);
+    // 拍子已在 hitPoint 內，僅需處理旋轉
+    paddle.setAttribute('transform', `rotate(${angle})`);
     defender.setAttribute('transform', `translate(${def.x - 450},${def.y - 500})`);
 
     setLine(incoming, incomingStart, hit);
@@ -145,6 +146,130 @@ function animateDemo(){
 
 [angleInput, hitXInput, hitYInput, ballXInput, ballYInput, defXInput, defYInput].forEach(el => {
     el.addEventListener('input', update);
+});
+
+// 拖曳扇形調整角度邏輯
+let isDragging = false;
+let isDraggingBall = false;
+let isDraggingDefender = false;
+let isDraggingHit = false;
+const courtSvg = document.getElementById('court');
+
+fanArea.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    // 鎖定指標，確保離開扇形範圍也能繼續追蹤
+    fanArea.setPointerCapture(e.pointerId);
+    // 調整戰術板時停止頁面滾動
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+incomingDot.addEventListener('pointerdown', (e) => {
+    isDraggingBall = true;
+    incomingDot.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+defender.addEventListener('pointerdown', (e) => {
+    isDraggingDefender = true;
+    defender.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+hitPoint.addEventListener('pointerdown', (e) => {
+    isDraggingHit = true;
+    hitPoint.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+window.addEventListener('pointermove', (e) => {
+    if (!isDragging && !isDraggingBall && !isDraggingDefender && !isDraggingHit) return;
+
+    // 1. 取得 SVG 座標轉換比例
+    const rect = courtSvg.getBoundingClientRect();
+    const svgX = (e.clientX - rect.left) * (900 / rect.width);
+    const svgY = (e.clientY - rect.top) * (650 / rect.height);
+
+    // 2. 取得目前的擊球點與來球起點
+    const hit = { x: Number(hitXInput.value), y: Number(hitYInput.value) };
+    const ball = { x: Number(ballXInput.value), y: Number(ballYInput.value) };
+
+    if (isDraggingBall) {
+        // 處理球的位置拖曳，並限制在 Input 的範圍內
+        ballXInput.value = Math.max(110, Math.min(790, Math.round(svgX)));
+        ballYInput.value = Math.max(340, Math.min(610, Math.round(svgY)));
+        update();
+        return;
+    }
+
+    if (isDraggingDefender) {
+        // 處理防守者位置拖曳，限制在防守區範圍內 (與 Input 設定一致)
+        defXInput.value = Math.max(110, Math.min(790, Math.round(svgX)));
+        defYInput.value = Math.max(430, Math.min(600, Math.round(svgY)));
+        update();
+        return;
+    }
+
+    if (isDraggingHit) {
+        // 處理擊球點位置拖曳，限制在對手半場範圍內 (與 Input 設定一致)
+        hitXInput.value = Math.max(110, Math.min(790, Math.round(svgX)));
+        hitYInput.value = Math.max(55, Math.min(315, Math.round(svgY)));
+        update();
+        return;
+    }
+
+    // 3. 計算基準角 (與 update 函式邏輯一致)
+    const baseDeg = Math.atan2(hit.y - ball.y, hit.x - ball.x) * 180 / Math.PI + 180;
+
+    // 4. 計算目前指標相對於擊球點的角度
+    const currentDeg = Math.atan2(svgY - hit.y, svgX - hit.x) * 180 / Math.PI;
+
+    // 5. 計算相對角度差 (angle)
+    let diff = currentDeg - baseDeg;
+
+    // 標準化角度至 -180 ~ 180
+    while (diff > 180) diff -= 360;
+    while (diff < -180) diff += 360;
+
+    // 限制範圍並更新
+    const finalAngle = Math.max(-55, Math.min(55, Math.round(diff)));
+    angleInput.value = finalAngle;
+    
+    update();
+});
+
+window.addEventListener('pointerup', (e) => {
+    if (isDragging) {
+        isDragging = false;
+        fanArea.releasePointerCapture(e.pointerId);
+        // 恢復頁面滾動
+        document.body.style.overflow = '';
+    } else if (isDraggingBall) {
+        isDraggingBall = false;
+        incomingDot.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
+    } else if (isDraggingDefender) {
+        isDraggingDefender = false;
+        defender.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
+    } else if (isDraggingHit) {
+        isDraggingHit = false;
+        hitPoint.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
+    }
+});
+
+window.addEventListener('pointercancel', (e) => {
+    if (isDragging || isDraggingBall || isDraggingDefender || isDraggingHit) {
+        isDragging = false;
+        isDraggingBall = false;
+        isDraggingDefender = false;
+        isDraggingHit = false;
+        document.body.style.overflow = '';
+    }
 });
 
 update();
