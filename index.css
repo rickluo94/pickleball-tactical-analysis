@@ -10,6 +10,9 @@
     --danger:#ef4444;
 }
 *{box-sizing:border-box}
+html{
+    scrollbar-gutter:stable;
+}
 body{
     margin:0;
     font-family:system-ui,-apple-system,"Noto Sans TC",Arial,sans-serif;
