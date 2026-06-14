@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>【JINHOPA】匹克球戰術分析工具｜拍面角度與攻擊路徑</title>
+<link rel="stylesheet" href="index.css" />
+<script src="index.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="panel">
+    <div class="header">
+      <h1>【JINHOPA】匹克球｜戰術分析工具</h1>
+      <p>以第一版為基礎：不拖曳，改用 X / Y 軸移動對手拍子位置，並分析攻擊角度、直線威脅與對角威脅。</p>
+    </div>
+
+    <div class="content">
+      <div class="courtBox">
+        <svg id="court" viewBox="0 0 900 650">
+          <rect x="0" y="0" width="900" height="650" fill="#6dbb6a"/>
+          <rect x="90" y="40" width="720" height="570" fill="none" stroke="white" stroke-width="5"/>
+          <line x1="90" y1="325" x2="810" y2="325" stroke="#222" stroke-width="6"/>
+          <line x1="90" y1="235" x2="810" y2="235" stroke="white" stroke-width="4"/>
+          <line x1="90" y1="415" x2="810" y2="415" stroke="white" stroke-width="4"/>
+          <line x1="450" y1="40" x2="450" y2="235" stroke="white" stroke-width="4"/>
+          <line x1="450" y1="415" x2="450" y2="610" stroke="white" stroke-width="4"/>
+
+          <text x="820" y="331" font-size="18" fill="#222">Net</text>
+          <text x="108" y="224" font-size="16" fill="white">Kitchen Line</text>
+          <text x="108" y="437" font-size="16" fill="white">Kitchen Line</text>
+
+          <!-- 可攻擊扇形 -->
+          <path id="fanArea" fill="rgba(167,227,109,.28)" stroke="rgba(122,201,67,.35)" stroke-width="2"></path>
+
+          <!-- 來球方向 -->
+          <line id="incoming" x1="260" y1="570" x2="600" y2="170" stroke="#111827" stroke-width="5" stroke-linecap="round"/>
+          <circle id="incomingDot" cx="260" cy="570" r="7" fill="#111827"/>
+          <text id="incomingText" x="275" y="545" font-size="18" fill="#111827">來球方向</text>
+
+          <!-- 攻擊路徑 -->
+          <line id="leftRay" stroke="#a7e36d" stroke-width="4" stroke-dasharray="8 8"/>
+          <line id="mainRay" stroke="#7ac943" stroke-width="7" stroke-linecap="round"/>
+          <line id="rightRay" stroke="#a7e36d" stroke-width="4" stroke-dasharray="8 8"/>
+
+          <!-- 防守者站位 -->
+          <g id="defender">
+            <circle cx="450" cy="500" r="16" fill="#2563eb"/>
+            <text x="473" y="506" font-size="17" font-weight="800" fill="#2563eb">防守站位</text>
+          </g>
+
+          <!-- 對手拍子與擊球點 -->
+          <g id="hitPoint">
+            <circle id="hitDot" r="8" fill="#1f2933"/>
+            <line x1="-20" y1="-20" x2="20" y2="20" stroke="#1f2933" stroke-width="5" stroke-linecap="round"/>
+            <line x1="20" y1="-20" x2="-20" y2="20" stroke="#1f2933" stroke-width="5" stroke-linecap="round"/>
+            <text x="22" y="-8" font-size="18" font-weight="700" fill="#1f2933">擊球點 X</text>
+          </g>
+
+          <g id="paddle">
+            <line x1="0" y1="0" x2="0" y2="-58" stroke="#1f2933" stroke-width="10" stroke-linecap="round"/>
+            <rect x="-14" y="-68" width="28" height="48" rx="13" fill="#1f2933"/>
+          </g>
+
+          <text id="routeText" x="610" y="230" font-size="20" font-weight="900" fill="#1f2933"></text>
+        </svg>
+      </div>
+
+      <aside class="side">
+        <div class="group">
+          <label>拍面角度 <span class="num"><span id="angleText">0</span>°</span></label>
+          <input id="angle" type="range" min="-55" max="55" value="0" />
+          <div class="btns">
+            <button onclick="setAngle(-35)">偏對角</button>
+            <button onclick="setAngle(0)">打中間</button>
+            <button onclick="setAngle(35)">偏直線</button>
+            <button class="secondary" onclick="animateDemo()">自動示範</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <label>對手拍子 X 軸 <span class="num"><span id="xText">600</span></span></label>
+          <input id="hitX" type="range" min="110" max="790" value="600" />
+          <label>對手拍子 Y 軸 <span class="num"><span id="yText">170</span></span></label>
+          <input id="hitY" type="range" min="55" max="315" value="170" />
+        </div>
+
+        <div class="group">
+          <label>來球 X 軸 <span class="num"><span id="ballXText">260</span></span></label>
+<input id="ballX" type="range" min="110" max="790" value="260" />
+<label>來球 Y 軸 <span class="num"><span id="ballYText">570</span></span></label>
+<input id="ballY" type="range" min="340" max="610" value="570" />
+
+<label>防守站位 X 軸 <span class="num"><span id="defXText">450</span></span></label>
+          <input id="defX" type="range" min="110" max="790" value="450" />
+          <label>防守站位 Y 軸 <span class="num"><span id="defYText">500</span></span></label>
+          <input id="defY" type="range" min="430" max="600" value="500" />
+        </div>
+
+        <div class="group">
+          <div class="legend">
+            <div class="item"><span class="dot" style="background:#111827"></span>來球方向</div>
+            <div class="item"><span class="dot" style="background:#7ac943"></span>主要可能攻擊路徑</div>
+            <div class="item"><span class="dot" style="background:#a7e36d"></span>可攻擊範圍</div>
+            <div class="item"><span class="dot" style="background:#2563eb"></span>防守站位</div>
+          </div>
+        </div>
+
+        <div class="group analysis">
+          <div class="card">
+            <strong>攻擊型態</strong>
+            <span id="routeName">中間壓迫</span>
+          </div>
+          <div class="card">
+            <strong>直線威脅</strong>
+            <span class="risk" id="lineRisk">--</span>
+          </div>
+          <div class="card">
+            <strong>對角威脅</strong>
+            <span class="risk" id="crossRisk">--</span>
+          </div>
+          <div class="card">
+            <strong>站位建議</strong>
+            <span id="suggestion">--</span>
+          </div>
+        </div>
+
+        <div class="note">
+          說明：這是視覺化戰術判斷工具，主要用於理解拍面角度、擊球點位置與防守站位之間的關係。
+        </div>
+        <a href="https://shopee.tw/product/1345340496/50554287939" target="_blank">
+          小工商【JINHOPA】高階匹克球拍｜摩擦回饋｜緩衝核心｜輕量化
+        </a>
+      </aside>
+    </div>
+  </div>
+</div>
+</body>
+</html>
