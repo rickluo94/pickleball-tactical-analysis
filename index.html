@@ -54,6 +54,14 @@
           <line id="leftRay" stroke="#a7e36d" stroke-width="4" stroke-dasharray="8 8"/>
           <line id="mainRay" stroke="#7ac943" stroke-width="7" stroke-linecap="round"/>
           <line id="rightRay" stroke="#a7e36d" stroke-width="4" stroke-dasharray="8 8"/>
+          <circle id="attackRangeHandle" r="11" fill="#7ac943" stroke="white" stroke-width="3" style="cursor: grab; pointer-events: auto; touch-action: none;"/>
+
+          <!-- 防守覆蓋扇形 -->
+          <path id="defFanArea" fill="rgba(147,197,253,.25)" stroke="rgba(96,165,250,.45)" stroke-width="2" style="cursor: move; pointer-events: auto; touch-action: none;"></path>
+          <line id="defLeftRay" stroke="#bfdbfe" stroke-width="4" stroke-dasharray="8 8"/>
+          <line id="defMainRay" stroke="#60a5fa" stroke-width="7" stroke-linecap="round"/>
+          <line id="defRightRay" stroke="#bfdbfe" stroke-width="4" stroke-dasharray="8 8"/>
+          <circle id="defRangeHandle" r="11" fill="#60a5fa" stroke="white" stroke-width="3" style="cursor: grab; pointer-events: auto; touch-action: none;"/>
 
           <!-- 防守者站位 -->
           <g id="defender" style="cursor: move; pointer-events: auto; touch-action: none;">
@@ -81,6 +89,8 @@
         <div class="group">
           <label>拍面角度 <span class="num"><span id="angleText">0</span>°</span></label>
           <input id="angle" type="range" min="-55" max="55" value="0" />
+          <label>攻擊範圍長度 <span class="num"><span id="attackRangeText">680</span></span></label>
+          <input id="attackRange" type="range" min="160" max="780" value="680" />
           <div class="btns">
             <button onclick="setAngle(-35)">偏右回擊</button>
             <button onclick="setAngle(0)">正面回擊</button>
@@ -106,6 +116,10 @@
           <input id="defX" type="range" min="65" max="455" value="260" />
           <label>防守站位 Y 軸 <span class="num"><span id="defYText">796</span></span></label>
           <input id="defY" type="range" min="680" max="954" value="796" />
+          <label>防守角度 <span class="num"><span id="defAngleText">0</span>°</span></label>
+          <input id="defAngle" type="range" min="-80" max="80" value="0" />
+          <label>防守範圍長度 <span class="num"><span id="defRangeText">410</span></span></label>
+          <input id="defRange" type="range" min="120" max="700" value="410" />
         </div>
 
         <div class="group">
@@ -114,6 +128,7 @@
             <div class="item"><span class="dot" style="background:#7ac943"></span>主要可能攻擊路徑</div>
             <div class="item"><span class="dot" style="background:#a7e36d"></span>可攻擊範圍</div>
             <div class="item"><span class="dot" style="background:#2563eb"></span>防守站位</div>
+            <div class="item"><span class="dot" style="background:#60a5fa"></span>防守覆蓋範圍</div>
           </div>
         </div>
 
