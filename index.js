@@ -25,9 +25,7 @@ const paddle = document.getElementById('paddle');
 const defender = document.getElementById('defender');
 const opponentEl = document.getElementById('opponent');
 
-const incoming = document.getElementById('incoming');
 const incomingDot = document.getElementById('incomingDot');
-const incomingText = document.getElementById('incomingText');
 const mainRay = document.getElementById('mainRay');
 const leftRay = document.getElementById('leftRay');
 const rightRay = document.getElementById('rightRay');
@@ -50,17 +48,20 @@ const VIEWBOX_HEIGHT = 1024;
 const COURT_CENTER_X = 260;
 const DEFENDER_HOME = {x:260,y:796};
 const OPPONENT_HOME = {x:110,y:120};
+const INCOMING_HOME = {x:149,y:909};
 const HIT_BOUNDS = {minX:65,maxX:455,minY:70,maxY:502};
 const BALL_BOUNDS = {minX:65,maxX:455,minY:532,maxY:954};
 const DEFENDER_BOUNDS = {minX:65,maxX:455,minY:532,maxY:954};
 const OPPONENT_BOUNDS = {minX:65,maxX:455,minY:70,maxY:502};
 const ATTACK_RANGE_BOUNDS = {min:120,max:1200};
 const DEF_RANGE_BOUNDS = {min:120,max:1200};
+const RANGE_HANDLE_OFFSET = 28;
+const FAN_CIRCLE_GAP = 34;
 
 let incomingStart = {x:149,y:909};
 let opponent = {...OPPONENT_HOME};
 const fan = 20;
-const defFan = 28;
+const defFan = 20;
 const defAngleLimit = 80;
 
 function clamp(n, min, max){
@@ -80,6 +81,28 @@ function setLine(line, a, b){
     line.setAttribute('y1', a.y);
     line.setAttribute('x2', b.x);
     line.setAttribute('y2', b.y);
+}
+
+function bringToFront(el){
+    if (el.parentNode) {
+        el.parentNode.appendChild(el);
+    }
+}
+
+function fanBandPath(origin, leftDeg, rightDeg, outerRadius, innerRadius){
+    const outerLeft = pointFrom(origin, leftDeg, outerRadius);
+    const outerRight = pointFrom(origin, rightDeg, outerRadius);
+    const innerLeft = pointFrom(origin, leftDeg, innerRadius);
+    const innerRight = pointFrom(origin, rightDeg, innerRadius);
+
+    return [
+        `M ${innerLeft.x} ${innerLeft.y}`,
+        `L ${outerLeft.x} ${outerLeft.y}`,
+        `A ${outerRadius} ${outerRadius} 0 0 1 ${outerRight.x} ${outerRight.y}`,
+        `L ${innerRight.x} ${innerRight.y}`,
+        `A ${innerRadius} ${innerRadius} 0 0 0 ${innerLeft.x} ${innerLeft.y}`,
+        'Z'
+    ].join(' ');
 }
 
 function distance(a, b){
@@ -130,13 +153,7 @@ function update(){
     paddle.setAttribute('transform', `rotate(${angle})`);
     defender.setAttribute('transform', `translate(${def.x - DEFENDER_HOME.x},${def.y - DEFENDER_HOME.y})`);
     opponentEl.setAttribute('transform', `translate(${opponent.x - OPPONENT_HOME.x},${opponent.y - OPPONENT_HOME.y})`);
-
-    setLine(incoming, incomingStart, hit);
-
-    incomingDot.setAttribute('cx', incomingStart.x);
-    incomingDot.setAttribute('cy', incomingStart.y);
-    incomingText.setAttribute('x', incomingStart.x + 15);
-    incomingText.setAttribute('y', incomingStart.y - 25);
+    incomingDot.setAttribute('transform', `translate(${incomingStart.x - INCOMING_HOME.x},${incomingStart.y - INCOMING_HOME.y})`);
 
     const baseDeg = Math.atan2(hit.y - incomingStart.y, hit.x - incomingStart.x) * 180 / Math.PI + 180;
     const shotDeg = baseDeg + angle;
@@ -148,10 +165,11 @@ function update(){
     setLine(mainRay, hit, mainEnd);
     setLine(leftRay, hit, leftEnd);
     setLine(rightRay, hit, rightEnd);
-    attackRangeHandle.setAttribute('cx', mainEnd.x);
-    attackRangeHandle.setAttribute('cy', mainEnd.y);
+    const attackHandlePoint = pointFrom(hit, shotDeg, rayLength + RANGE_HANDLE_OFFSET);
+    attackRangeHandle.setAttribute('cx', attackHandlePoint.x);
+    attackRangeHandle.setAttribute('cy', attackHandlePoint.y);
 
-    fanArea.setAttribute('d', `M ${hit.x} ${hit.y} L ${leftEnd.x} ${leftEnd.y} A ${rayLength} ${rayLength} 0 0 1 ${rightEnd.x} ${rightEnd.y} Z`);
+    fanArea.setAttribute('d', fanBandPath(hit, shotDeg - fan, shotDeg + fan, rayLength, FAN_CIRCLE_GAP));
 
     const defBaseDeg = Math.atan2(hit.y - def.y, hit.x - def.x) * 180 / Math.PI;
     const defAimDeg = defBaseDeg + defAngle;
@@ -162,9 +180,10 @@ function update(){
     setLine(defMainRay, def, defMainEnd);
     setLine(defLeftRay, def, defLeftEnd);
     setLine(defRightRay, def, defRightEnd);
-    defRangeHandle.setAttribute('cx', defMainEnd.x);
-    defRangeHandle.setAttribute('cy', defMainEnd.y);
-    defFanArea.setAttribute('d', `M ${def.x} ${def.y} L ${defLeftEnd.x} ${defLeftEnd.y} A ${defRayLength} ${defRayLength} 0 0 1 ${defRightEnd.x} ${defRightEnd.y} Z`);
+    const defHandlePoint = pointFrom(def, defAimDeg, defRayLength + RANGE_HANDLE_OFFSET);
+    defRangeHandle.setAttribute('cx', defHandlePoint.x);
+    defRangeHandle.setAttribute('cy', defHandlePoint.y);
+    defFanArea.setAttribute('d', fanBandPath(def, defAimDeg - defFan, defAimDeg + defFan, defRayLength, FAN_CIRCLE_GAP));
 
     const name = routeName(angle);
     routeText.textContent = name;
@@ -224,6 +243,7 @@ const courtSvg = document.getElementById('court');
 
 fanArea.addEventListener('pointerdown', (e) => {
     isDragging = true;
+    bringToFront(fanArea);
     // 鎖定指標，確保離開扇形範圍也能繼續追蹤
     fanArea.setPointerCapture(e.pointerId);
     // 調整戰術板時停止頁面滾動
@@ -233,6 +253,7 @@ fanArea.addEventListener('pointerdown', (e) => {
 
 attackRangeHandle.addEventListener('pointerdown', (e) => {
     isDraggingAttackRange = true;
+    bringToFront(attackRangeHandle);
     attackRangeHandle.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
@@ -240,6 +261,7 @@ attackRangeHandle.addEventListener('pointerdown', (e) => {
 
 defFanArea.addEventListener('pointerdown', (e) => {
     isDraggingDefFan = true;
+    bringToFront(defFanArea);
     defFanArea.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
@@ -247,6 +269,7 @@ defFanArea.addEventListener('pointerdown', (e) => {
 
 defRangeHandle.addEventListener('pointerdown', (e) => {
     isDraggingDefRange = true;
+    bringToFront(defRangeHandle);
     defRangeHandle.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
@@ -254,6 +277,7 @@ defRangeHandle.addEventListener('pointerdown', (e) => {
 
 incomingDot.addEventListener('pointerdown', (e) => {
     isDraggingBall = true;
+    bringToFront(incomingDot);
     incomingDot.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
@@ -261,6 +285,7 @@ incomingDot.addEventListener('pointerdown', (e) => {
 
 defender.addEventListener('pointerdown', (e) => {
     isDraggingDefender = true;
+    bringToFront(defender);
     defender.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
@@ -268,6 +293,7 @@ defender.addEventListener('pointerdown', (e) => {
 
 opponentEl.addEventListener('pointerdown', (e) => {
     isDraggingOpponent = true;
+    bringToFront(opponentEl);
     opponentEl.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
@@ -275,6 +301,7 @@ opponentEl.addEventListener('pointerdown', (e) => {
 
 hitPoint.addEventListener('pointerdown', (e) => {
     isDraggingHit = true;
+    bringToFront(hitPoint);
     hitPoint.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
@@ -328,13 +355,13 @@ window.addEventListener('pointermove', (e) => {
     }
 
     if (isDraggingAttackRange) {
-        attackRangeInput.value = clamp(Math.round(distance(hit, pointer)), ATTACK_RANGE_BOUNDS.min, ATTACK_RANGE_BOUNDS.max);
+        attackRangeInput.value = clamp(Math.round(distance(hit, pointer) - RANGE_HANDLE_OFFSET), ATTACK_RANGE_BOUNDS.min, ATTACK_RANGE_BOUNDS.max);
         update();
         return;
     }
 
     if (isDraggingDefRange) {
-        defRangeInput.value = clamp(Math.round(distance(def, pointer)), DEF_RANGE_BOUNDS.min, DEF_RANGE_BOUNDS.max);
+        defRangeInput.value = clamp(Math.round(distance(def, pointer) - RANGE_HANDLE_OFFSET), DEF_RANGE_BOUNDS.min, DEF_RANGE_BOUNDS.max);
         update();
         return;
     }
@@ -360,7 +387,7 @@ window.addEventListener('pointermove', (e) => {
     // 限制範圍並更新
     const finalAngle = Math.max(-55, Math.min(55, Math.round(diff)));
     angleInput.value = finalAngle;
-    
+
     update();
 });
 
