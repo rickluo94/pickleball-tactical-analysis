@@ -13,7 +13,7 @@
   {
     "match": 2,
     "teamA": [
-      { "name": "Q.D", "level": 2.0 },
+      { "name": "綦 ㄑㄧˊ | Rick", "level": 2.0 },
       { "name": "豪", "level": 1.0 }
     ],
     "teamB": [
@@ -39,7 +39,7 @@
       { "name": "潔", "level": 0.0 }
     ],
     "teamB": [
-      { "name": "Q.D", "level": 2.0 },
+      { "name": "綦 ㄑㄧˊ | Rick", "level": 2.0 },
       { "name": "威", "level": 1.0 }
     ]
   },
@@ -68,7 +68,7 @@
   {
     "match": 7,
     "teamA": [
-      { "name": "Q.D", "level": 2.0 },
+      { "name": "綦 ㄑㄧˊ | Rick", "level": 2.0 },
       { "name": "Spookie", "level": 0.0 }
     ],
     "teamB": [
@@ -94,7 +94,7 @@
       { "name": "Spookie", "level": 0.0 }
     ],
     "teamB": [
-      { "name": "Q.D", "level": 2.0 },
+      { "name": "綦 ㄑㄧˊ | Rick", "level": 2.0 },
       { "name": "靜", "level": 1.0 }
     ]
   },
