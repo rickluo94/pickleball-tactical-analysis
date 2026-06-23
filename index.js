@@ -21,7 +21,7 @@ const attackRangeText = document.getElementById('attackRangeText');
 const defRangeText = document.getElementById('defRangeText');
 
 const hitPoint = document.getElementById('hitPoint');
-const paddle = document.getElementById('paddle');
+// const paddle = document.getElementById('paddle');
 const defender = document.getElementById('defender');
 const opponentEl = document.getElementById('opponent');
 
@@ -150,7 +150,7 @@ function update(){
 
     hitPoint.setAttribute('transform', `translate(${hit.x},${hit.y})`);
     // 拍子已在 hitPoint 內，僅需處理旋轉
-    paddle.setAttribute('transform', `rotate(${angle})`);
+    // paddle.setAttribute('transform', `rotate(${angle})`);
     defender.setAttribute('transform', `translate(${def.x - DEFENDER_HOME.x},${def.y - DEFENDER_HOME.y})`);
     opponentEl.setAttribute('transform', `translate(${opponent.x - OPPONENT_HOME.x},${opponent.y - OPPONENT_HOME.y})`);
     incomingDot.setAttribute('transform', `translate(${incomingStart.x - INCOMING_HOME.x},${incomingStart.y - INCOMING_HOME.y})`);
