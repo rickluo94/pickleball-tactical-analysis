@@ -8,6 +8,10 @@ const ballYInput=document.getElementById('ballY');
 const defAngleInput = document.getElementById('defAngle');
 const attackRangeInput = document.getElementById('attackRange');
 const defRangeInput = document.getElementById('defRange');
+const opponentAngleInput = document.getElementById('opponentAngle');
+const opponentRangeInput = document.getElementById('opponentRange');
+const ballAngleInput = document.getElementById('ballAngle');
+const ballRangeInput = document.getElementById('ballRange');
 
 const angleText = document.getElementById('angleText');
 const xText = document.getElementById('xText');
@@ -19,6 +23,10 @@ const ballYText=document.getElementById('ballYText');
 const defAngleText = document.getElementById('defAngleText');
 const attackRangeText = document.getElementById('attackRangeText');
 const defRangeText = document.getElementById('defRangeText');
+const opponentAngleText = document.getElementById('opponentAngleText');
+const opponentRangeText = document.getElementById('opponentRangeText');
+const ballAngleText = document.getElementById('ballAngleText');
+const ballRangeText = document.getElementById('ballRangeText');
 
 const hitPoint = document.getElementById('hitPoint');
 // const paddle = document.getElementById('paddle');
@@ -36,6 +44,16 @@ const defMainRay = document.getElementById('defMainRay');
 const defLeftRay = document.getElementById('defLeftRay');
 const defRightRay = document.getElementById('defRightRay');
 const defRangeHandle = document.getElementById('defRangeHandle');
+const opponentFanArea = document.getElementById('opponentFanArea');
+const opponentMainRay = document.getElementById('opponentMainRay');
+const opponentLeftRay = document.getElementById('opponentLeftRay');
+const opponentRightRay = document.getElementById('opponentRightRay');
+const opponentRangeHandle = document.getElementById('opponentRangeHandle');
+const ballFanArea = document.getElementById('ballFanArea');
+const ballMainRay = document.getElementById('ballMainRay');
+const ballLeftRay = document.getElementById('ballLeftRay');
+const ballRightRay = document.getElementById('ballRightRay');
+const ballRangeHandle = document.getElementById('ballRangeHandle');
 const routeText = document.getElementById('routeText');
 
 const routeNameEl = document.getElementById('routeName');
@@ -55,6 +73,8 @@ const DEFENDER_BOUNDS = {minX:65,maxX:455,minY:532,maxY:954};
 const OPPONENT_BOUNDS = {minX:65,maxX:455,minY:70,maxY:502};
 const ATTACK_RANGE_BOUNDS = {min:120,max:1200};
 const DEF_RANGE_BOUNDS = {min:120,max:1200};
+const OPPONENT_RANGE_BOUNDS = {min:120,max:1200};
+const BALL_RANGE_BOUNDS = {min:120,max:1200};
 const RANGE_HANDLE_OFFSET = 28;
 const FAN_CIRCLE_GAP = 34;
 
@@ -63,6 +83,10 @@ let opponent = {...OPPONENT_HOME};
 const fan = 20;
 const defFan = 20;
 const defAngleLimit = 80;
+const opponentFan = 20;
+const opponentAngleLimit = 80;
+const ballFan = 20;
+const ballAngleLimit = 80;
 
 function clamp(n, min, max){
     return Math.max(min, Math.min(max, n));
@@ -131,15 +155,23 @@ function normalizeAngle(deg){
 function update(){
     const angle = Number(angleInput.value);
     const defAngle = Number(defAngleInput.value);
+    const opponentAngle = Number(opponentAngleInput.value);
+    const ballAngle = Number(ballAngleInput.value);
     const rayLength = Number(attackRangeInput.value);
     const defRayLength = Number(defRangeInput.value);
+    const opponentRayLength = Number(opponentRangeInput.value);
+    const ballRayLength = Number(ballRangeInput.value);
     const hit = { x:Number(hitXInput.value), y:Number(hitYInput.value) };
     const def = { x:Number(defXInput.value), y:Number(defYInput.value) };
 
     angleText.textContent = angle;
     defAngleText.textContent = defAngle;
+    opponentAngleText.textContent = opponentAngle;
+    ballAngleText.textContent = ballAngle;
     attackRangeText.textContent = rayLength;
     defRangeText.textContent = defRayLength;
+    opponentRangeText.textContent = opponentRayLength;
+    ballRangeText.textContent = ballRayLength;
     xText.textContent = hit.x;
     yText.textContent = hit.y;
     defXText.textContent = def.x;
@@ -154,6 +186,20 @@ function update(){
     defender.setAttribute('transform', `translate(${def.x - DEFENDER_HOME.x},${def.y - DEFENDER_HOME.y})`);
     opponentEl.setAttribute('transform', `translate(${opponent.x - OPPONENT_HOME.x},${opponent.y - OPPONENT_HOME.y})`);
     incomingDot.setAttribute('transform', `translate(${incomingStart.x - INCOMING_HOME.x},${incomingStart.y - INCOMING_HOME.y})`);
+
+    const opponentBaseDeg = Math.atan2(def.y - opponent.y, def.x - opponent.x) * 180 / Math.PI;
+    const opponentAimDeg = opponentBaseDeg + opponentAngle;
+    const opponentMainEnd = pointFrom(opponent, opponentAimDeg, opponentRayLength);
+    const opponentLeftEnd = pointFrom(opponent, opponentAimDeg - opponentFan, opponentRayLength);
+    const opponentRightEnd = pointFrom(opponent, opponentAimDeg + opponentFan, opponentRayLength);
+
+    setLine(opponentMainRay, opponent, opponentMainEnd);
+    setLine(opponentLeftRay, opponent, opponentLeftEnd);
+    setLine(opponentRightRay, opponent, opponentRightEnd);
+    const opponentHandlePoint = pointFrom(opponent, opponentAimDeg, opponentRayLength + RANGE_HANDLE_OFFSET);
+    opponentRangeHandle.setAttribute('cx', opponentHandlePoint.x);
+    opponentRangeHandle.setAttribute('cy', opponentHandlePoint.y);
+    opponentFanArea.setAttribute('d', fanBandPath(opponent, opponentAimDeg - opponentFan, opponentAimDeg + opponentFan, opponentRayLength, FAN_CIRCLE_GAP));
 
     const baseDeg = Math.atan2(hit.y - incomingStart.y, hit.x - incomingStart.x) * 180 / Math.PI + 180;
     const shotDeg = baseDeg + angle;
@@ -170,6 +216,20 @@ function update(){
     attackRangeHandle.setAttribute('cy', attackHandlePoint.y);
 
     fanArea.setAttribute('d', fanBandPath(hit, shotDeg - fan, shotDeg + fan, rayLength, FAN_CIRCLE_GAP));
+
+    const ballBaseDeg = Math.atan2(hit.y - incomingStart.y, hit.x - incomingStart.x) * 180 / Math.PI;
+    const ballAimDeg = ballBaseDeg + ballAngle;
+    const ballMainEnd = pointFrom(incomingStart, ballAimDeg, ballRayLength);
+    const ballLeftEnd = pointFrom(incomingStart, ballAimDeg - ballFan, ballRayLength);
+    const ballRightEnd = pointFrom(incomingStart, ballAimDeg + ballFan, ballRayLength);
+
+    setLine(ballMainRay, incomingStart, ballMainEnd);
+    setLine(ballLeftRay, incomingStart, ballLeftEnd);
+    setLine(ballRightRay, incomingStart, ballRightEnd);
+    const ballHandlePoint = pointFrom(incomingStart, ballAimDeg, ballRayLength + RANGE_HANDLE_OFFSET);
+    ballRangeHandle.setAttribute('cx', ballHandlePoint.x);
+    ballRangeHandle.setAttribute('cy', ballHandlePoint.y);
+    ballFanArea.setAttribute('d', fanBandPath(incomingStart, ballAimDeg - ballFan, ballAimDeg + ballFan, ballRayLength, FAN_CIRCLE_GAP));
 
     const defBaseDeg = Math.atan2(hit.y - def.y, hit.x - def.x) * 180 / Math.PI;
     const defAimDeg = defBaseDeg + defAngle;
@@ -226,7 +286,7 @@ function animateDemo(){
     setTimeout(() => clearInterval(timer), 5000);
 }
 
-[angleInput, hitXInput, hitYInput, ballXInput, ballYInput, defXInput, defYInput, defAngleInput, attackRangeInput, defRangeInput].forEach(el => {
+[angleInput, hitXInput, hitYInput, ballXInput, ballYInput, defXInput, defYInput, defAngleInput, attackRangeInput, defRangeInput, opponentAngleInput, opponentRangeInput, ballAngleInput, ballRangeInput].forEach(el => {
     el.addEventListener('input', update);
 });
 
@@ -239,6 +299,10 @@ let isDraggingDefFan = false;
 let isDraggingAttackRange = false;
 let isDraggingDefRange = false;
 let isDraggingOpponent = false;
+let isDraggingOpponentFan = false;
+let isDraggingOpponentRange = false;
+let isDraggingBallFan = false;
+let isDraggingBallRange = false;
 const courtSvg = document.getElementById('court');
 
 fanArea.addEventListener('pointerdown', (e) => {
@@ -255,6 +319,38 @@ attackRangeHandle.addEventListener('pointerdown', (e) => {
     isDraggingAttackRange = true;
     bringToFront(attackRangeHandle);
     attackRangeHandle.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+opponentFanArea.addEventListener('pointerdown', (e) => {
+    isDraggingOpponentFan = true;
+    bringToFront(opponentFanArea);
+    opponentFanArea.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+opponentRangeHandle.addEventListener('pointerdown', (e) => {
+    isDraggingOpponentRange = true;
+    bringToFront(opponentRangeHandle);
+    opponentRangeHandle.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+ballFanArea.addEventListener('pointerdown', (e) => {
+    isDraggingBallFan = true;
+    bringToFront(ballFanArea);
+    ballFanArea.setPointerCapture(e.pointerId);
+    document.body.style.overflow = 'hidden';
+    e.preventDefault();
+});
+
+ballRangeHandle.addEventListener('pointerdown', (e) => {
+    isDraggingBallRange = true;
+    bringToFront(ballRangeHandle);
+    ballRangeHandle.setPointerCapture(e.pointerId);
     document.body.style.overflow = 'hidden';
     e.preventDefault();
 });
@@ -308,7 +404,7 @@ hitPoint.addEventListener('pointerdown', (e) => {
 });
 
 window.addEventListener('pointermove', (e) => {
-    if (!isDragging && !isDraggingBall && !isDraggingDefender && !isDraggingHit && !isDraggingDefFan && !isDraggingAttackRange && !isDraggingDefRange && !isDraggingOpponent) return;
+    if (!isDragging && !isDraggingBall && !isDraggingDefender && !isDraggingHit && !isDraggingDefFan && !isDraggingAttackRange && !isDraggingDefRange && !isDraggingOpponent && !isDraggingOpponentFan && !isDraggingOpponentRange && !isDraggingBallFan && !isDraggingBallRange) return;
 
     // 1. 取得 SVG 座標轉換比例
     const rect = courtSvg.getBoundingClientRect();
@@ -366,11 +462,41 @@ window.addEventListener('pointermove', (e) => {
         return;
     }
 
+    if (isDraggingOpponentRange) {
+        opponentRangeInput.value = clamp(Math.round(distance(opponent, pointer) - RANGE_HANDLE_OFFSET), OPPONENT_RANGE_BOUNDS.min, OPPONENT_RANGE_BOUNDS.max);
+        update();
+        return;
+    }
+
+    if (isDraggingBallRange) {
+        ballRangeInput.value = clamp(Math.round(distance(ball, pointer) - RANGE_HANDLE_OFFSET), BALL_RANGE_BOUNDS.min, BALL_RANGE_BOUNDS.max);
+        update();
+        return;
+    }
+
     if (isDraggingDefFan) {
         const defBaseDeg = Math.atan2(hit.y - def.y, hit.x - def.x) * 180 / Math.PI;
         const currentDeg = Math.atan2(svgY - def.y, svgX - def.x) * 180 / Math.PI;
         const finalAngle = clamp(Math.round(normalizeAngle(currentDeg - defBaseDeg)), -defAngleLimit, defAngleLimit);
         defAngleInput.value = finalAngle;
+        update();
+        return;
+    }
+
+    if (isDraggingOpponentFan) {
+        const opponentBaseDeg = Math.atan2(def.y - opponent.y, def.x - opponent.x) * 180 / Math.PI;
+        const currentDeg = Math.atan2(svgY - opponent.y, svgX - opponent.x) * 180 / Math.PI;
+        const finalAngle = clamp(Math.round(normalizeAngle(currentDeg - opponentBaseDeg)), -opponentAngleLimit, opponentAngleLimit);
+        opponentAngleInput.value = finalAngle;
+        update();
+        return;
+    }
+
+    if (isDraggingBallFan) {
+        const ballBaseDeg = Math.atan2(hit.y - ball.y, hit.x - ball.x) * 180 / Math.PI;
+        const currentDeg = Math.atan2(svgY - ball.y, svgX - ball.x) * 180 / Math.PI;
+        const finalAngle = clamp(Math.round(normalizeAngle(currentDeg - ballBaseDeg)), -ballAngleLimit, ballAngleLimit);
+        ballAngleInput.value = finalAngle;
         update();
         return;
     }
@@ -401,6 +527,22 @@ window.addEventListener('pointerup', (e) => {
         isDraggingAttackRange = false;
         attackRangeHandle.releasePointerCapture(e.pointerId);
         document.body.style.overflow = '';
+    } else if (isDraggingOpponentFan) {
+        isDraggingOpponentFan = false;
+        opponentFanArea.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
+    } else if (isDraggingOpponentRange) {
+        isDraggingOpponentRange = false;
+        opponentRangeHandle.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
+    } else if (isDraggingBallFan) {
+        isDraggingBallFan = false;
+        ballFanArea.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
+    } else if (isDraggingBallRange) {
+        isDraggingBallRange = false;
+        ballRangeHandle.releasePointerCapture(e.pointerId);
+        document.body.style.overflow = '';
     } else if (isDraggingDefFan) {
         isDraggingDefFan = false;
         defFanArea.releasePointerCapture(e.pointerId);
@@ -429,7 +571,7 @@ window.addEventListener('pointerup', (e) => {
 });
 
 window.addEventListener('pointercancel', (e) => {
-    if (isDragging || isDraggingBall || isDraggingDefender || isDraggingHit || isDraggingDefFan || isDraggingAttackRange || isDraggingDefRange || isDraggingOpponent) {
+    if (isDragging || isDraggingBall || isDraggingDefender || isDraggingHit || isDraggingDefFan || isDraggingAttackRange || isDraggingDefRange || isDraggingOpponent || isDraggingOpponentFan || isDraggingOpponentRange || isDraggingBallFan || isDraggingBallRange) {
         isDragging = false;
         isDraggingBall = false;
         isDraggingDefender = false;
@@ -438,6 +580,10 @@ window.addEventListener('pointercancel', (e) => {
         isDraggingAttackRange = false;
         isDraggingDefRange = false;
         isDraggingOpponent = false;
+        isDraggingOpponentFan = false;
+        isDraggingOpponentRange = false;
+        isDraggingBallFan = false;
+        isDraggingBallRange = false;
         document.body.style.overflow = '';
     }
 });

@@ -16,8 +16,8 @@
 <meta property="og:url" content="https://rickluo94.github.io/pickleball-tactical-analysis/" />
 <meta property="og:locale" content="zh_TW" />
 <meta name="twitter:card" content="summary" />
-<link rel="stylesheet" href="index.css?v=202606142205" />
-<script src="index.js?v=202606142205" defer></script>
+<link rel="stylesheet" href="index.css?v=202606230319" />
+<script src="index.js?v=202606230319" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -68,6 +68,13 @@
           <text x="62" y="354" font-size="16" fill="white">Kitchen Line</text>
           <text x="62" y="681" font-size="16" fill="white">Kitchen Line</text>
 
+          <!-- 對手A攻擊扇形 -->
+          <path id="opponentFanArea" fill="rgba(248,113,113,.18)" stroke="rgba(239,68,68,.38)" stroke-width="2" style="cursor: move; pointer-events: auto; touch-action: none;"></path>
+          <line id="opponentLeftRay" stroke="#fecaca" stroke-width="4" stroke-dasharray="8 8"/>
+          <line id="opponentMainRay" stroke="#f87171" stroke-width="7" stroke-linecap="round"/>
+          <line id="opponentRightRay" stroke="#fecaca" stroke-width="4" stroke-dasharray="8 8"/>
+          <circle id="opponentRangeHandle" r="18" fill="#ef4444" stroke="white" stroke-width="3" style="cursor: grab; pointer-events: auto; touch-action: none;"/>
+
           <!-- 對手站位 -->
           <g id="opponent" style="cursor: move; pointer-events: auto; touch-action: none;">
             <rect x="40" y="58" width="150" height="112" fill="transparent"/>
@@ -78,6 +85,13 @@
 
           <!-- 可攻擊扇形 -->
           <path id="fanArea" fill="rgba(167,227,109,.28)" stroke="rgba(122,201,67,.35)" stroke-width="2" style="cursor: move; pointer-events: auto; touch-action: none;"></path>
+
+          <!-- 防守B覆蓋扇形 -->
+          <path id="ballFanArea" fill="rgba(125,211,252,.22)" stroke="rgba(14,165,233,.42)" stroke-width="2" style="cursor: move; pointer-events: auto; touch-action: none;"></path>
+          <line id="ballLeftRay" stroke="#bae6fd" stroke-width="4" stroke-dasharray="8 8"/>
+          <line id="ballMainRay" stroke="#38bdf8" stroke-width="7" stroke-linecap="round"/>
+          <line id="ballRightRay" stroke="#bae6fd" stroke-width="4" stroke-dasharray="8 8"/>
+          <circle id="ballRangeHandle" r="18" fill="#0ea5e9" stroke="white" stroke-width="3" style="cursor: grab; pointer-events: auto; touch-action: none;"/>
 
           <!-- 防守站位 -->
           <g id="incomingDot" style="cursor: move; pointer-events: auto; touch-action: none;">
@@ -143,6 +157,10 @@
           <input id="hitX" type="range" min="65" max="455" value="348" />
           <label>對手拍子 Y 軸 <span class="num"><span id="yText">261</span></span></label>
           <input id="hitY" type="range" min="70" max="502" value="261" />
+          <label>對手A攻擊角度 <span class="num"><span id="opponentAngleText">0</span>°</span></label>
+          <input id="opponentAngle" type="range" min="-80" max="80" value="0" />
+          <label>對手A攻擊範圍長度 <span class="num"><span id="opponentRangeText">120</span></span></label>
+          <input id="opponentRange" type="range" min="120" max="1200" value="120" />
         </div>
 
         <div class="group">
@@ -150,6 +168,10 @@
 <input id="ballX" type="range" min="65" max="455" value="149" />
 <label>防守B站位 Y 軸 <span class="num"><span id="ballYText">909</span></span></label>
 <input id="ballY" type="range" min="532" max="954" value="909" />
+<label>防守B角度 <span class="num"><span id="ballAngleText">0</span>°</span></label>
+<input id="ballAngle" type="range" min="-80" max="80" value="0" />
+<label>防守B範圍長度 <span class="num"><span id="ballRangeText">120</span></span></label>
+<input id="ballRange" type="range" min="120" max="1200" value="120" />
 
 <label>防守A站位 X 軸 <span class="num"><span id="defXText">260</span></span></label>
           <input id="defX" type="range" min="65" max="455" value="260" />
