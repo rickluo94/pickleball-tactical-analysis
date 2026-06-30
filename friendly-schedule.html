@@ -45,21 +45,40 @@
       padding: 24px 16px 36px;
     }
 
-    .topbar {
+    .site-nav {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      align-items: flex-start;
+      gap: 14px;
       margin-bottom: 16px;
     }
 
-    .home-link {
+    .site-nav-title {
+      margin: 0;
+      min-width: 180px;
+      font-size: 26px;
+      line-height: 1.35;
+    }
+
+    .site-nav-links {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .site-nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
       color: var(--green);
       text-decoration: none;
       border: 1px solid #cfe0d8;
       background: rgba(255,255,255,.72);
-      border-radius: 999px;
-      padding: 8px 14px;
+      border-radius: 8px;
+      padding: 8px 12px;
       font-size: 14px;
       font-weight: 800;
       white-space: nowrap;
@@ -241,13 +260,26 @@
         padding: 16px 12px 28px;
       }
 
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
+      .site-nav {
+        display: block;
       }
 
-      h1 {
-        font-size: 22px;
+      .site-nav-title {
+        min-width: 0;
+        margin-bottom: 12px;
+      }
+
+      .site-nav-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .site-nav-link {
+        width: 100%;
+        min-width: 0;
+        white-space: normal;
+        text-align: center;
       }
 
       .teams {
@@ -258,16 +290,25 @@
         text-align: center;
       }
     }
+
+    @media (max-width: 380px) {
+      .site-nav-links {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="topbar">
-      <div>
-        <h1>友誼賽預排賽程</h1>
+    <nav class="site-nav" aria-label="主要導覽">
+      <h1 class="site-nav-title">友誼賽預排賽程</h1>
+      <div class="site-nav-links">
+        <a class="site-nav-link" href="index.html">回首頁</a>
+        <a class="site-nav-link" href="tips.html">Tips小技巧</a>
+        <a class="site-nav-link" href="pickleball-mixer.html">守擂賽</a>
+        <a class="site-nav-link" href="course.html">課程表</a>
       </div>
-      <a class="home-link" href="index.html">回首頁</a>
-    </div>
+    </nav>
 
     <section class="hero">
       <p>依照預排每場 A/B 隊組合、快速核對賽程。</p>

@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>七月份匹克球課程表</title>
+  <meta name="description" content="2026 年 7 月四週系統化匹克球基礎課程表，包含發球接發球、底線控球、過渡區推進與網前丁克截擊訓練。">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://rickluo94.github.io/pickleball-tactical-analysis/course.html">
+  <meta property="og:title" content="七月份匹克球課程表">
+  <meta property="og:description" content="四週系統化匹克球基礎奠定班，從規則、發接發、底線控球到網前攻防逐週建立實戰能力。">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://rickluo94.github.io/pickleball-tactical-analysis/course.html">
+  <meta property="og:locale" content="zh_TW">
+  <meta name="twitter:card" content="summary">
   <style>
     :root {
       --primary-color: #4CAF50;
@@ -28,21 +37,40 @@
       padding: 20px;
     }
 
-    .top-nav {
+    .site-nav {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      align-items: flex-start;
+      gap: 14px;
       margin-bottom: 18px;
     }
 
-    .nav-button {
+    .site-nav-title {
+      color: var(--primary-dark);
+      margin: 0;
+      min-width: 180px;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .site-nav-links {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .site-nav-link {
       appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
       background: #eef2ff;
       color: #2563eb;
       text-decoration: none;
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 700;
@@ -52,7 +80,7 @@
       font-family: inherit;
     }
 
-    .nav-button:hover {
+    .site-nav-link:hover {
       background: #dbeafe;
     }
 
@@ -160,6 +188,27 @@
       body {
         padding: 10px;
       }
+      .container {
+        padding: 12px;
+      }
+      .site-nav {
+        display: block;
+      }
+      .site-nav-title {
+        min-width: 0;
+        margin-bottom: 12px;
+      }
+      .site-nav-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .site-nav-link {
+        width: 100%;
+        min-width: 0;
+        white-space: normal;
+        text-align: center;
+      }
       .card-header {
         flex-direction: column;
         align-items: flex-start;
@@ -168,14 +217,25 @@
         font-size: 1.15rem;
       }
     }
+
+    @media (max-width: 380px) {
+      .site-nav-links {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <nav class="top-nav" aria-label="頁面導覽">
-    <button type="button" class="nav-button" onclick="goBack()">← 回上一頁</button>
-    <a class="nav-button" href="index.html">回首頁</a>
+  <nav class="site-nav" aria-label="主要導覽">
+    <p class="site-nav-title">匹克球課程表</p>
+    <div class="site-nav-links">
+      <button type="button" class="site-nav-link" onclick="goBack()">← 回上一頁</button>
+      <a class="site-nav-link" href="index.html">回首頁</a>
+      <a class="site-nav-link" href="tips.html">Tips小技巧</a>
+      <a class="site-nav-link" href="friendly-schedule.html">友誼賽程</a>
+    </div>
   </nav>
 
   <header>
@@ -183,6 +243,7 @@
     <p class="subtitle">每週一升級 ‧ 打造穩健實戰力</p>
     <div class="month-tag">2026 年 7 月份課程</div>
     <div class="month-tag">新手的第一個家</div>
+    <div class="month-tag">每週開課自由選</div>
   </header>
 
   <main class="timeline">

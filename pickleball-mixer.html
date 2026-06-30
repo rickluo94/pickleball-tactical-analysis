@@ -33,6 +33,50 @@
       margin: 0 auto;
     }
 
+    .site-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .site-nav-title {
+      margin: 0;
+      min-width: 180px;
+      font-size: 26px;
+      line-height: 1.35;
+    }
+
+    .site-nav-links {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .site-nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      color: var(--main);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 800;
+      background: rgba(255,255,255,.72);
+      white-space: nowrap;
+    }
+
+    .site-nav-link:hover {
+      color: var(--text);
+      background: var(--card);
+    }
+
     .hero {
       background: linear-gradient(135deg, var(--main), #174235);
       color: white;
@@ -256,14 +300,48 @@
 
     @media (max-width: 900px) {
       body { padding: 14px; }
+      .site-nav {
+        display: block;
+      }
+      .site-nav-title {
+        min-width: 0;
+        margin-bottom: 12px;
+        font-size: 22px;
+      }
+      .site-nav-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .site-nav-link {
+        width: 100%;
+        min-width: 0;
+        white-space: normal;
+        text-align: center;
+      }
       .grid, .court, .lists, .rules { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 380px) {
+      .site-nav-links {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <nav class="site-nav" aria-label="主要導覽">
+      <h1 class="site-nav-title">Pickleball Mixer 守擂賽</h1>
+      <div class="site-nav-links">
+        <a class="site-nav-link" href="index.html">回首頁</a>
+        <a class="site-nav-link" href="tips.html">Tips小技巧</a>
+        <a class="site-nav-link" href="friendly-schedule.html">友誼賽程</a>
+        <a class="site-nav-link" href="course.html">課程表</a>
+      </div>
+    </nav>
+
     <section class="hero">
-      <h1>Pickleball Mixer 守擂賽</h1>
       <p>落地得分制｜5 分獲勝｜勝隊留場｜連勝 2 場強制下場並拆散配對</p>
     </section>
 
