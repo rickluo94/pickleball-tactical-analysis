@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pickleball Mixer 守擂賽</title>
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --card: #ffffff;
+      --main: #2f6f5e;
+      --accent: #f2b84b;
+      --danger: #d65a4a;
+      --text: #26332f;
+      --muted: #7b847f;
+      --line: #e4ded3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px;
+    }
+
+    h1, h2, h3 { margin: 0 0 12px; }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .site-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .site-nav-title {
+      margin: 0;
+      min-width: 180px;
+      font-size: 26px;
+      line-height: 1.35;
+    }
+
+    .site-nav-links {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .site-nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      color: var(--main);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 800;
+      background: rgba(255,255,255,.72);
+      white-space: nowrap;
+    }
+
+    .site-nav-link:hover {
+      color: var(--text);
+      background: var(--card);
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--main), #174235);
+      color: white;
+      padding: 24px;
+      border-radius: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    }
+
+    .hero p { margin: 6px 0 0; opacity: .9; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,.05);
+    }
+
+    textarea {
+      width: 100%;
+      height: 260px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 15px;
+      line-height: 1.6;
+      outline: none;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--main);
+      color: white;
+      margin: 4px 4px 4px 0;
+    }
+
+    button.secondary { background: #39433f; }
+    button.warning { background: var(--accent); color: #3a2b05; }
+    button.danger { background: var(--danger); }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .rule {
+      background: #f8f6f1;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    .usage {
+      background: #eef7f3;
+      border: 1px solid #c9ded6;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .usage h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .usage ol {
+      margin: 0;
+      padding-left: 22px;
+      line-height: 1.7;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .court {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .team {
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: #fbfaf7;
+    }
+
+    .team.active {
+      border-color: var(--main);
+      background: #eef7f3;
+    }
+
+    .team-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .players {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+
+    .score {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .score strong {
+      font-size: 44px;
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .score button {
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      font-size: 22px;
+    }
+
+    .status {
+      padding: 14px;
+      border-radius: 16px;
+      background: #fff7e2;
+      border: 1px solid #f0d99b;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .lists {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .person {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f8f6f1;
+      border: 1px solid var(--line);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .person small { color: var(--muted); }
+
+    .history {
+      max-height: 280px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .match {
+      border-left: 4px solid var(--main);
+      padding: 10px 12px;
+      background: #f8f6f1;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 10px 0;
+    }
+
+    .page-footer {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .home-link {
+      display: inline-block;
+      color: var(--muted);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      background: rgba(255,255,255,.55);
+    }
+
+    .home-link:hover {
+      color: var(--text);
+      background: var(--card);
+    }
+
+    @media (max-width: 900px) {
+      body { padding: 14px; }
+      .site-nav {
+        display: block;
+      }
+      .site-nav-title {
+        min-width: 0;
+        margin-bottom: 12px;
+        font-size: 22px;
+      }
+      .site-nav-links {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .site-nav-link {
+        width: 100%;
+        min-width: 0;
+        white-space: normal;
+        text-align: center;
+      }
+      .grid, .court, .lists, .rules { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 380px) {
+      .site-nav-links {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="site-nav" aria-label="主要導覽">
+      <h1 class="site-nav-title">Pickleball Mixer 守擂賽</h1>
+      <div class="site-nav-links">
+        <a class="site-nav-link" href="index.html">回首頁</a>
+        <a class="site-nav-link" href="tips.html">Tips小技巧</a>
+        <a class="site-nav-link" href="friendly-schedule.html">友誼賽程</a>
+        <a class="site-nav-link" href="course.html">技能修練</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <p>落地得分制｜5 分獲勝｜勝隊留場｜連勝 2 場強制下場並拆散配對</p>
+    </section>
+
+    <div class="grid">
+      <aside class="card">
+        <h2>人員名單</h2>
+        <textarea id="nameInput">
+1.A1
+2.A2
+3.A3
+4.A4
+5.A5
+6.A6
+7.A7
+8.A8
+9.A9
+10.A10
+11.A11
+12.A12
+13.A13
+14.A14
+        </textarea>
+        <div style="margin-top: 10px;">
+          <button onclick="loadPlayers()">載入名單</button>
+          <button class="secondary" onclick="autoStart()">開始排場</button>
+          <button class="danger" onclick="resetAll()">重置</button>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:18px 0;">
+
+        <h3>賽制規則</h3>
+        <div class="empty">
+          貼上「1.姓名」格式即可。系統會優先讓等待最久的人上場，並避免剛拆散的二連勝搭檔立刻再次配對。
+        </div>
+      </aside>
+
+      <main>
+        <section class="card">
+          <div class="rules">
+            <div class="rule">🎾 每球得分</div>
+            <div class="rule">🏁 先到 5 分勝</div>
+            <div class="rule">👑 勝隊留場</div>
+            <div class="rule">🔀 二連勝拆隊</div>
+          </div>
+
+          <div class="usage">
+            <h3>正確操作流程</h3>
+            <ol>
+              <li>先按比分 ＋。</li>
+              <li>到 5 分後，系統判定勝隊。</li>
+              <li>敗隊下場。</li>
+              <li>再按「下一場」，才會補新的挑戰隊。</li>
+            </ol>
+          </div>
+
+          <div id="status" class="status">請先載入名單，然後點「開始排場」。</div>
+
+          <div class="court">
+            <div id="teamABox" class="team">
+              <div class="team-title">
+                <span>A 隊</span>
+                <span id="teamAStreak">0 連勝</span>
+              </div>
+              <div id="teamAPlayers" class="players">尚未排定</div>
+              <div class="score">
+                <button onclick="changeScore('A', -1)">−</button>
+                <strong id="scoreA">0</strong>
+                <button onclick="changeScore('A', 1)">＋</button>
+                <button class="warning" onclick="declareWinner('A')">A 勝</button>
+              </div>
+            </div>
+
+            <div id="teamBBox" class="team">
+              <div class="team-title">
+                <span>B 隊</span>
+                <span id="teamBStreak">0 連勝</span>
+              </div>
+              <div id="teamBPlayers" class="players">尚未排定</div>
+              <div class="score">
+                <button onclick="changeScore('B', -1)">−</button>
+                <strong id="scoreB">0</strong>
+                <button onclick="changeScore('B', 1)">＋</button>
+                <button class="warning" onclick="declareWinner('B')">B 勝</button>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="nextMatch()">下一場</button>
+          <button class="secondary" onclick="shuffleQueue()">等待區洗牌</button>
+        </section>
+
+        <section class="lists" style="margin-top:20px;">
+          <div class="card">
+            <h2>等待區</h2>
+            <div id="queueList"></div>
+          </div>
+
+          <div class="card">
+            <h2>出場統計</h2>
+            <div id="statsList"></div>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:20px;">
+          <h2>比賽紀錄</h2>
+          <div id="historyList" class="history"></div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="page-footer">
+      <a class="home-link" href="index.html">回首頁</a>
+    </footer>
+  </div>
+
+  <script>
+    let players = [];
+    let queue = [];
+    let teamA = [];
+    let teamB = [];
+    let scoreA = 0;
+    let scoreB = 0;
+    let streakA = 0;
+    let streakB = 0;
+    let matchNo = 0;
+    let history = [];
+    let bannedPairs = new Set();
+
+    function parseNames(text) {
+      return text
+        .split(/\n+/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(line => line.replace(/^\d+\s*[.、)]\s*/, '').trim())
+        .filter(Boolean);
+    }
+
+    function pairKey(a, b) {
+      return [a, b].sort().join('＋');
+    }
+
+    function loadPlayers() {
+      const names = parseNames(document.getElementById('nameInput').value);
+      players = names.map(name => ({
+        name,
+        played: 0,
+        wins: 0,
+        waiting: 0,
+        partners: new Set()
+      }));
+      queue = players.map(p => p.name);
+      teamA = [];
+      teamB = [];
+      scoreA = 0;
+      scoreB = 0;
+      streakA = 0;
+      streakB = 0;
+      matchNo = 0;
+      history = [];
+      bannedPairs = new Set();
+      setStatus(`已載入 ${players.length} 位球員。`);
+      render();
+    }
+
+    function autoStart() {
+      if (players.length < 4) loadPlayers();
+      if (players.length < 4) {
+        setStatus('至少需要 4 位球員。');
+        return;
+      }
+      teamA = takePair();
+      teamB = takePair();
+      streakA = 0;
+      streakB = 0;
+      resetScore();
+      matchNo = 1;
+      setStatus(`第 ${matchNo} 場開始。`);
+      render();
+    }
+
+    function takePair() {
+      if (queue.length < 2) return [];
+
+      queue.sort((a, b) => getPlayer(b).waiting - getPlayer(a).waiting);
+
+      let first = queue.shift();
+      let secondIndex = queue.findIndex(name => !bannedPairs.has(pairKey(first, name)));
+
+      if (secondIndex === -1) secondIndex = 0;
+
+      let second = queue.splice(secondIndex, 1)[0];
+
+      getPlayer(first).partners.add(second);
+      getPlayer(second).partners.add(first);
+
+      return [first, second];
+    }
+
+    function declareWinner(side) {
+      if (teamA.length < 2 || teamB.length < 2) return;
+
+      const winner = side === 'A' ? teamA : teamB;
+      const loser = side === 'A' ? teamB : teamA;
+      const winnerScore = side === 'A' ? scoreA : scoreB;
+      const loserScore = side === 'A' ? scoreB : scoreA;
+
+      winner.forEach(n => {
+        getPlayer(n).wins++;
+        getPlayer(n).played++;
+      });
+
+      loser.forEach(n => {
+        getPlayer(n).played++;
+      });
+
+      history.unshift({
+        no: matchNo,
+        a: [...teamA],
+        b: [...teamB],
+        score: `${scoreA}：${scoreB}`,
+        winner: side
+      });
+
+      loser.forEach(n => queue.push(n));
+
+      if (side === 'A') {
+        streakA++;
+        streakB = 0;
+
+        if (streakA >= 2) {
+          bannedPairs.add(pairKey(teamA[0], teamA[1]));
+          queue.push(...teamA);
+          teamA = [];
+          teamB = [];
+          streakA = 0;
+          streakB = 0;
+          setStatus(`第 ${matchNo} 場：A 隊 ${winner.join('＋')} 二連勝，強制下場並拆隊。`);
+        } else {
+          teamB = [];
+          setStatus(`第 ${matchNo} 場：A 隊獲勝，留場等待挑戰。`);
+        }
+      } else {
+        streakB++;
+        streakA = 0;
+
+        if (streakB >= 2) {
+          bannedPairs.add(pairKey(teamB[0], teamB[1]));
+          queue.push(...teamB);
+          teamA = [];
+          teamB = [];
+          streakA = 0;
+          streakB = 0;
+          setStatus(`第 ${matchNo} 場：B 隊 ${winner.join('＋')} 二連勝，強制下場並拆隊。`);
+        } else {
+          teamA = [];
+          setStatus(`第 ${matchNo} 場：B 隊獲勝，留場等待挑戰。`);
+        }
+      }
+
+      players.forEach(p => {
+        if (queue.includes(p.name)) p.waiting++;
+        else p.waiting = 0;
+      });
+
+      resetScore();
+      render();
+    }
+
+    function nextMatch() {
+      if (players.length < 4) {
+        setStatus('請先載入名單。');
+        return;
+      }
+
+      if (teamA.length === 0 && teamB.length === 0) {
+        teamA = takePair();
+        teamB = takePair();
+      } else if (teamA.length === 0) {
+        teamA = takePair();
+      } else if (teamB.length === 0) {
+        teamB = takePair();
+      }
+
+      if (teamA.length < 2 || teamB.length < 2) {
+        setStatus('等待區人數不足，無法安排下一場。');
+        return;
+      }
+
+      matchNo++;
+      resetScore();
+      setStatus(`第 ${matchNo} 場開始：${teamA.join('＋')} vs ${teamB.join('＋')}`);
+      render();
+    }
+
+    function changeScore(side, delta) {
+      if (side === 'A') {
+        scoreA = Math.max(0, scoreA + delta);
+        if (scoreA >= 5) declareWinner('A');
+      } else {
+        scoreB = Math.max(0, scoreB + delta);
+        if (scoreB >= 5) declareWinner('B');
+      }
+      render();
+    }
+
+    function resetScore() {
+      scoreA = 0;
+      scoreB = 0;
+    }
+
+    function shuffleQueue() {
+      for (let i = queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [queue[i], queue[j]] = [queue[j], queue[i]];
+      }
+      setStatus('等待區已洗牌。');
+      render();
+    }
+
+    function getPlayer(name) {
+      return players.find(p => p.name === name);
+    }
+
+    function setStatus(text) {
+      document.getElementById('status').textContent = text;
+    }
+
+    function render() {
+      document.getElementById('teamAPlayers').textContent = teamA.length ? teamA.join(' ＋ ') : '等待排定';
+      document.getElementById('teamBPlayers').textContent = teamB.length ? teamB.join(' ＋ ') : '等待排定';
+
+      document.getElementById('scoreA').textContent = scoreA;
+      document.getElementById('scoreB').textContent = scoreB;
+      document.getElementById('teamAStreak').textContent = `${streakA} 連勝`;
+      document.getElementById('teamBStreak').textContent = `${streakB} 連勝`;
+
+      document.getElementById('teamABox').classList.toggle('active', teamA.length === 2);
+      document.getElementById('teamBBox').classList.toggle('active', teamB.length === 2);
+
+      document.getElementById('queueList').innerHTML = queue.length
+        ? queue.map((name, i) => {
+          const p = getPlayer(name);
+          return `<div class="person"><span>${i + 1}. ${name}</span><small>等待 ${p?.waiting || 0}</small></div>`;
+        }).join('')
+        : '<div class="empty">目前沒有等待球員</div>';
+
+      const sorted = [...players].sort((a, b) => b.played - a.played || b.wins - a.wins);
+      document.getElementById('statsList').innerHTML = sorted.length
+        ? sorted.map(p => `
+          <div class="person">
+            <span>${p.name}</span>
+            <small>出場 ${p.played}｜勝 ${p.wins}｜搭檔 ${p.partners.size}</small>
+          </div>
+        `).join('')
+        : '<div class="empty">尚無資料</div>';
+
+      document.getElementById('historyList').innerHTML = history.length
+        ? history.map(m => `
+          <div class="match">
+            <strong>第 ${m.no} 場</strong><br>
+            A：${m.a.join('＋')} vs B：${m.b.join('＋')}<br>
+            比分：${m.score}｜勝隊：${m.winner} 隊
+          </div>
+        `).join('')
+        : '<div class="empty">尚無比賽紀錄</div>';
+    }
+
+    function resetAll() {
+      if (!confirm('確定要重置全部資料？')) return;
+      loadPlayers();
+    }
+
+    loadPlayers();
+  </script>
+</body>
+</html>
