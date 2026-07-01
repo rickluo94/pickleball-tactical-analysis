@@ -59,6 +59,7 @@ type CareerProfile = {
   trait: string;
   description: string;
   image?: string;
+  resultPage?: string;
 };
 
 const VIEWBOX_WIDTH = 520;
@@ -338,6 +339,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     english: 'Berserker',
     trait: '力量強攻派',
     image: '匹克狂戰士.png',
+    resultPage: 'result-berserker.html',
     description: '「進攻就是最好的防守！」你擁有無與倫比的進攻慾望與力量爆發。底線重抽與網前重扣是你的招牌技能。你追求用球速直接貫穿對手的防線，是不給對手任何喘息空間的絕對進攻核心。',
   },
   paladin: {
@@ -345,6 +347,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     english: 'Paladin',
     trait: '防禦控制派',
     image: '匹克聖戰士.png',
+    resultPage: 'result-paladin.html',
     description: '「銅牆鐵壁，堅不可摧。」你是球場上最穩健的盾牌。擁有驚人的耐心與細膩手感，擅長吸收對手的所有重扣，並將球速完美重設（Reset）。你用無解的防守磨光對手的耐性，直到對方自亂陣腳。',
   },
   mage: {
@@ -352,6 +355,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     english: 'Mage',
     trait: '旋轉派',
     image: '匹克法師.png',
+    resultPage: 'result-mage.html',
     description: '「軌跡多變，變幻莫測。」你擊出的每一顆球都像是附加了狀態異常（Debuff）。你擅長操控強烈的上旋、下旋與側旋，讓球落地後產生極其詭譎的彈跳。對手在你面前往往頻頻打鐵，完全抓不到擊球節奏。',
   },
   assassin: {
@@ -359,6 +363,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     english: 'Assassin',
     trait: '角度派',
     image: '匹克刺客.png',
+    resultPage: 'result-assassin.html',
     description: '「不拼蠻力，一擊必殺。」你是步伐輕盈的球場藝術家。你不會一味盲目發力，而是像老練的獵人一樣，冷靜捕捉對手陣型拉開的瞬間。利用大角度斜對角、極邊線球等刁鑽落點，直接切入對手意想不到的死角。',
   },
   druid: {
@@ -366,6 +371,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     english: 'Druid',
     trait: '全能派',
     image: '匹克德魯伊.png',
+    resultPage: 'result-druid.html',
     description: '「形態百變，隨機應變。」你是雙打搭檔最想遇到的萬金油隊友。能攻能守的你，前一拍還在和對手溫柔地網前鬥小球，下一拍抓到機會立刻化身重砲手。你能根據戰局和隊友狀態隨時切換形態，是全方位的戰術家。',
   },
 };
@@ -491,7 +497,7 @@ function QuizPage() {
     setView('result');
     setQuizMessage('');
     setShareMessage('');
-    window.history.replaceState({}, '', `${window.location.pathname}?result=${encodeQuizAnswers(answers)}`);
+    window.history.replaceState({}, '', `${result.profile.resultPage ?? 'quiz.html'}?result=${encodeQuizAnswers(answers)}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -501,14 +507,14 @@ function QuizPage() {
     setView('quiz');
     setQuizMessage('');
     setShareMessage('');
-    window.history.replaceState({}, '', `${window.location.pathname}`);
+    window.history.replaceState({}, '', 'quiz.html');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function returnToQuiz() {
     setView('quiz');
     setShareMessage('');
-    window.history.replaceState({}, '', `${window.location.pathname}`);
+    window.history.replaceState({}, '', 'quiz.html');
   }
 
   async function copyShareUrl() {
@@ -654,7 +660,7 @@ function App() {
   const timerRef = useRef<number | null>(null);
   const courtRef = useRef<SVGSVGElement | null>(null);
   const isTacticalPage = window.location.pathname.endsWith('/tactical-analysis.html');
-  const isQuizPage = window.location.pathname.endsWith('/quiz.html');
+  const isQuizPage = window.location.pathname.endsWith('/quiz.html') || /\/result-[a-z]+\.html$/.test(window.location.pathname);
 
   const derived = useMemo(() => {
     const opponentBaseDeg = Math.atan2(controls.defender.y - controls.opponent.y, controls.defender.x - controls.opponent.x) * 180 / Math.PI;
