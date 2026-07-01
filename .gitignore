@@ -16,3 +16,8 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+
+# Node / Vite
+node_modules/
+dist/
+*.tsbuildinfo

@@ -1,18 +1,22 @@
 # pickleball-tactical-analysis
-JINHOPA 匹克球戰術分析工具 V3
 
-## 發布更新
+JINHOPA 匹克球戰術分析工具，已升級為 React + TypeScript + Vite。
 
-更新 `index.css` 或 `index.js` 後，請同步更新 HTML 內的資源版本號，避免手機瀏覽器繼續使用舊快取。
+## 開發
 
-目前版本號：
-
-```html
-index.css?v=202606230319
-index.js?v=202606230319
+```bash
+npm install
+npm run dev
 ```
 
-建議使用發布時間格式 `YYYYMMDDHHMM`，例如下一次發布可改成 `202606230319`。
+## 建置
+
+```bash
+npm run build
+```
+
+主要程式碼在 `src/App.tsx`，樣式在 `src/styles.css`。首頁 `index.html` 只顯示導覽列，戰術分析工具在 `tactical-analysis.html`。既有靜態頁面與 SEO 檔案放在 `public/`，建置時會一併輸出。
 
 ### 無情工商
+
 [【JINHOPA】高階匹克球拍｜摩擦回饋｜緩衝核心｜輕量化](https://shopee.tw/product/1345340496/50554287939)
