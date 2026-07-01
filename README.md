@@ -15,7 +15,7 @@ npm run dev
 npm run build
 ```
 
-主要程式碼在 `src/App.tsx`，樣式在 `src/styles.css`。首頁 `index.html` 只顯示導覽列，戰術分析工具在 `tactical-analysis.html`。既有靜態頁面與 SEO 檔案放在 `public/`，建置時會一併輸出。
+主要程式碼在 `src/App.tsx`，樣式在 `src/styles.css`。首頁 `index.html` 顯示導覽列與 banner，戰術分析工具在 `tactical-analysis.html`，職業測驗在 `quiz.html`。既有靜態頁面與 SEO 檔案放在 `public/`，建置時會一併輸出。
 
 ### 無情工商
 

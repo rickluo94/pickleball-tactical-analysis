@@ -5,11 +5,17 @@ import { resolve } from 'node:path';
 export default defineConfig({
   plugins: [react()],
   base: './',
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
   build: {
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'index.html'),
         tacticalAnalysis: resolve(__dirname, 'tactical-analysis.html'),
+        quiz: resolve(__dirname, 'quiz.html'),
       },
     },
   },

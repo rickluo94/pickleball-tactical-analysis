@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import ProfileCard from './components/ProfileCard';
 
 type Point = {
   x: number;
@@ -39,6 +40,25 @@ type Controls = {
   opponent: Point;
   opponentAngle: number;
   opponentRange: number;
+};
+
+type QuizOption = 'A' | 'B' | 'C' | 'D';
+
+type CareerType = 'pending' | 'berserker' | 'paladin' | 'mage' | 'assassin' | 'druid';
+
+type QuizQuestion = {
+  id: number;
+  prompt: string;
+  options: Record<QuizOption, string>;
+  dType?: 'assassin' | 'druid';
+};
+
+type CareerProfile = {
+  title: string;
+  english: string;
+  trait: string;
+  description: string;
+  image?: string;
 };
 
 const VIEWBOX_WIDTH = 520;
@@ -178,24 +198,453 @@ function RangeField({
 function SiteNav() {
   return (
     <nav className="site-nav" aria-label="主要導覽">
-      <h1 className="site-nav-title">Pickle Today 冒險的起點！</h1>
+      <h1 className="site-nav-title">
+        <a href="index.html">Pickle Today 冒險的起點！</a>
+      </h1>
       <div className="site-nav-links">
-        <a className="site-nav-link" href="tactical-analysis.html">戰術分析工具</a>
+        <a className="site-nav-link" href="quiz.html">匹克職業傾向測驗</a>
+        <a className="site-nav-link" href="course.html">技能修練</a>
+        <a className="site-nav-link" href="friendly-schedule.html">友誼賽程</a>
         <a className="site-nav-link" href="tips.html">Tips小技巧</a>
         <a className="site-nav-link" href="pickleball-mixer.html">守擂賽</a>
-        <a className="site-nav-link" href="friendly-schedule.html">友誼賽程</a>
-        <a className="site-nav-link" href="course.html">技能修練</a>
+        <a className="site-nav-link" href="tactical-analysis.html">戰術分析工具</a>
       </div>
     </nav>
   );
 }
 
+const quizQuestions: QuizQuestion[] = [
+  {
+    id: 1,
+    prompt: '當對手打出一顆非常高、有機會直接得分的網前高球（Pop-up）時，你的第一直覺反應是？',
+    dType: 'druid',
+    options: {
+      A: '全力起跳，用最猛烈的殺球（Smash）把球砸向對手腳邊',
+      B: '冷靜觀察對手的站位，輕柔地將球點進沒人防守的廚房線死角',
+      C: '帶上強烈切旋將球壓低，讓球落地後怪異彈跳使對方無法回擊',
+      D: '視情況而定，如果隊友已經上前就打點，隊友在後方就穩健過渡',
+    },
+  },
+  {
+    id: 2,
+    prompt: '在雙打比賽中，你最喜歡與哪一種打法特質的隊友組隊？',
+    dType: 'druid',
+    options: {
+      A: '能夠瘋狂進攻、幫我製造最後一擊機會的重砲手',
+      B: '穩如泰山、能接下所有重扣並重設球速（Reset）的防守大師',
+      C: '腳步輕盈、隨時能利用邊線出奇制勝的靈活跑者',
+      D: '甚麼球都能打、能攻能守且隨時可以配合我戰術切換的萬金油',
+    },
+  },
+  {
+    id: 3,
+    prompt: '當你被對手連續重扣、陷入極度被動的防守劣勢時，你通常會怎麼應對？',
+    dType: 'assassin',
+    options: {
+      A: '找機會硬碰硬，直接在底線跟對手對抽重球拼輸贏',
+      B: '展現極限耐性，專注於接下重扣並打出細膩的過渡吊球（Drop Shot）',
+      C: '用詭譎的切旋球改變球速，試圖破壞對手的連續進攻節奏',
+      D: '步伐保持輕盈，一邊穩健防守一邊尋找對手露出的防線死角',
+    },
+  },
+  {
+    id: 4,
+    prompt: '你認為在匹克球場上，最讓你感到痛快、有成就感的瞬間是？',
+    dType: 'assassin',
+    options: {
+      A: '用絕對的力量與速度正面貫穿對手的防線',
+      B: '靠著滴水不漏的完美防守，直到對手自己失去耐性失誤',
+      C: '打出一顆強烈上旋或側旋，看著對手判斷失誤打鐵',
+      D: '利用極刁鑽的斜對角球（Cross-court）劃破球場死角得分',
+    },
+  },
+  {
+    id: 5,
+    prompt: '關於網前的「廚房線（Non-Volley Zone）」爭奪戰，你的核心戰術通常是？',
+    dType: 'druid',
+    options: {
+      A: '不想跟對方慢慢磨，找機會就要發力重抽打破僵局',
+      B: '享受一顆顆柔和的短吊球（Dink），靠耐性拖垮對手',
+      C: '在短吊球中加入不同的上旋或下旋，讓對手接得極為難受',
+      D: '隨時準備切換節奏，前一拍溫柔吊球，下一拍立刻變身重砲手',
+    },
+  },
+  {
+    id: 6,
+    prompt: '比賽進行到關鍵局，你的發球局到了。此時你最想發出什麼樣的球？',
+    dType: 'assassin',
+    options: {
+      A: '貼著網頂、球速極快的強力平擊發球，直接壓迫對方到底線',
+      B: '落點很深、高度適中但極其穩健的發球，保證自己不失誤',
+      C: '帶著強烈側旋或上旋的變化球，讓球落地跳向意想不到的方向',
+      D: '發向對手兩人的中央地帶，或是他們比較不擅長的反手拍空檔',
+    },
+  },
+  {
+    id: 7,
+    prompt: '當你發現對手有「退到底線後方」的防守習慣，你會採取什麼攻擊策略？',
+    dType: 'assassin',
+    options: {
+      A: '在底線瘋狂與對方展開重抽大戰，用力量壓垮對方',
+      B: '故意把球吸得很短、很貼網，逼對方必須大範圍向前奔跑極限救球',
+      C: '瘋狂摩擦球皮打出極深的上旋球，讓球落地後快速向前衝衝擊對方',
+      D: '利用對手退後產生的空檔，打出大角度的斜線，將對方徹底調離防守位置',
+    },
+  },
+  {
+    id: 8,
+    prompt: '當你面對對手連續不斷的猛烈重扣攻擊時，你最直覺、也最常做出的回擊方式是？',
+    dType: 'assassin',
+    options: {
+      A: '用更大的力氣跟對手正面對抽，試圖用更快的速度正面壓制回去',
+      B: '輕柔收力回擊，將球速完全重設（Reset），讓球軟綿綿地貼著網子落下進入廚房線',
+      C: '拍面大力一削，送出一顆超強的下旋球，試圖破壞對方的擊球節奏',
+      D: '腳步迅速往側邊大跨一步，直接在空中大角度將球截擊切入邊線',
+    },
+  },
+  {
+    id: 9,
+    prompt: '當你的隊友在場上突然體力下滑、失誤變多，導致陷入僵局時，你通常會採取什麼樣的打法調整？',
+    dType: 'assassin',
+    options: {
+      A: '增加主動發力攻擊的次數，試圖用個人突破與力量強攻來幫隊友分擔壓力',
+      B: '轉為極端保守的防守狀態，大範圍幫隊友補位，用極高的容錯率穩住局面',
+      C: '提高球的旋轉度與變化，試圖讓對手回擊品質下降，替隊友製造好打的球',
+      D: '隨時觀察對手露出的死角，不拼體力，專挑對方兩人之間的空檔打刁鑽角度',
+    },
+  },
+  {
+    id: 10,
+    prompt: '如果你在場上看到對手兩個人都擠在球場正中央、防線大開時，你的最佳擊球選擇會是？',
+    dType: 'assassin',
+    options: {
+      A: '對準其中一人的胸口或腳邊，用盡全身力氣打出一顆超高速的正面追身球',
+      B: '穩穩地把球送回對手腳下，繼續跟對方在網前耐心地打短吊球磨耐性',
+      C: '順著風向或擊球慣性，打出一顆帶有強烈上旋或側旋的怪異彈跳球',
+      D: '打出一顆大角度的斜對角球（Cross-court），讓球精準落在邊線與廚房線的交界死角',
+    },
+  },
+];
+
+const careerProfiles: Record<CareerType, CareerProfile> = {
+  pending: {
+    title: '等待作答',
+    english: '',
+    trait: '完成測驗後判定',
+    description: '請依照直覺選擇最接近你的打法。系統會統計 A、B、C、D 的總數，並在 D 選項最多時依照題目脈絡判斷你偏向潛行刺客或德魯伊。',
+  },
+  berserker: {
+    title: '匹克狂戰士',
+    english: 'Berserker',
+    trait: '力量強攻派',
+    image: '匹克狂戰士.png',
+    description: '「進攻就是最好的防守！」你擁有無與倫比的進攻慾望與力量爆發。底線重抽與網前重扣是你的招牌技能。你追求用球速直接貫穿對手的防線，是不給對手任何喘息空間的絕對進攻核心。',
+  },
+  paladin: {
+    title: '匹克聖騎士',
+    english: 'Paladin',
+    trait: '防禦控制派',
+    image: '匹克聖戰士.png',
+    description: '「銅牆鐵壁，堅不可摧。」你是球場上最穩健的盾牌。擁有驚人的耐心與細膩手感，擅長吸收對手的所有重扣，並將球速完美重設（Reset）。你用無解的防守磨光對手的耐性，直到對方自亂陣腳。',
+  },
+  mage: {
+    title: '匹克法師',
+    english: 'Mage',
+    trait: '旋轉派',
+    image: '匹克法師.png',
+    description: '「軌跡多變，變幻莫測。」你擊出的每一顆球都像是附加了狀態異常（Debuff）。你擅長操控強烈的上旋、下旋與側旋，讓球落地後產生極其詭譎的彈跳。對手在你面前往往頻頻打鐵，完全抓不到擊球節奏。',
+  },
+  assassin: {
+    title: '匹克刺客',
+    english: 'Assassin',
+    trait: '角度派',
+    image: '匹克刺客.png',
+    description: '「不拼蠻力，一擊必殺。」你是步伐輕盈的球場藝術家。你不會一味盲目發力，而是像老練的獵人一樣，冷靜捕捉對手陣型拉開的瞬間。利用大角度斜對角、極邊線球等刁鑽落點，直接切入對手意想不到的死角。',
+  },
+  druid: {
+    title: '匹克德魯伊',
+    english: 'Druid',
+    trait: '全能派',
+    image: '匹克德魯伊.png',
+    description: '「形態百變，隨機應變。」你是雙打搭檔最想遇到的萬金油隊友。能攻能守的你，前一拍還在和對手溫柔地網前鬥小球，下一拍抓到機會立刻化身重砲手。你能根據戰局和隊友狀態隨時切換形態，是全方位的戰術家。',
+  },
+};
+
+function getQuizResult(answers: Partial<Record<number, QuizOption>>) {
+  const counts: Record<QuizOption, number> = { A: 0, B: 0, C: 0, D: 0 };
+  let assassinD = 0;
+  let druidD = 0;
+
+  quizQuestions.forEach((question) => {
+    const answer = answers[question.id];
+    if (!answer) return;
+    counts[answer] += 1;
+    if (answer === 'D') {
+      if (question.dType === 'druid') druidD += 1;
+      if (question.dType === 'assassin') assassinD += 1;
+    }
+  });
+
+  const maxCount = Math.max(...Object.values(counts));
+  if (maxCount === 0) {
+    return { profile: careerProfiles.pending, counts, assassinD, druidD };
+  }
+
+  const leaders = (Object.keys(counts) as QuizOption[]).filter((option) => counts[option] === maxCount);
+  if (leaders.includes('D')) {
+    return {
+      profile: druidD > assassinD ? careerProfiles.druid : careerProfiles.assassin,
+      counts,
+      assassinD,
+      druidD,
+    };
+  }
+
+  if (leaders.includes('A')) return { profile: careerProfiles.berserker, counts, assassinD, druidD };
+  if (leaders.includes('B')) return { profile: careerProfiles.paladin, counts, assassinD, druidD };
+  return { profile: careerProfiles.mage, counts, assassinD, druidD };
+}
+
+function encodeQuizAnswers(answers: Partial<Record<number, QuizOption>>) {
+  const optionMap: Record<QuizOption, number> = { A: 0, B: 1, C: 2, D: 3 };
+  let packed = 0;
+
+  quizQuestions.forEach((question) => {
+    const answer = answers[question.id];
+    packed = (packed << 2) | (answer ? optionMap[answer] : 0);
+  });
+
+  return (packed ^ 0x8f3a5).toString(36);
+}
+
+function decodeQuizAnswers(encoded: string | null): Partial<Record<number, QuizOption>> {
+  if (!encoded) return {};
+
+  const parsed = Number.parseInt(encoded, 36);
+  if (!Number.isFinite(parsed)) return {};
+
+  let packed = parsed ^ 0x8f3a5;
+  const options: QuizOption[] = ['A', 'B', 'C', 'D'];
+  const nextAnswers: Partial<Record<number, QuizOption>> = {};
+
+  for (let index = quizQuestions.length - 1; index >= 0; index -= 1) {
+    const optionValue = packed & 0b11;
+    nextAnswers[quizQuestions[index].id] = options[optionValue];
+    packed >>= 2;
+  }
+
+  return packed === 0 ? nextAnswers : {};
+}
+
+function hasCompleteQuizAnswers(answers: Partial<Record<number, QuizOption>>) {
+  return quizQuestions.every((question) => Boolean(answers[question.id]));
+}
+
+function QuizPage() {
+  const initialAnswers = decodeQuizAnswers(new URLSearchParams(window.location.search).get('result'));
+  const hasSharedResult = hasCompleteQuizAnswers(initialAnswers);
+  const [answers, setAnswers] = useState<Partial<Record<number, QuizOption>>>(initialAnswers);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [view, setView] = useState<'quiz' | 'result'>(hasSharedResult ? 'result' : 'quiz');
+  const [quizMessage, setQuizMessage] = useState('');
+  const [shareMessage, setShareMessage] = useState('');
+  const answeredCount = Object.keys(answers).length;
+  const isComplete = answeredCount === quizQuestions.length;
+  const currentQuestion = quizQuestions[currentIndex];
+  const isFirstQuestion = currentIndex === 0;
+  const isLastQuestion = currentIndex === quizQuestions.length - 1;
+  const result = getQuizResult(answers);
+
+  function updateAnswer(questionId: number, option: QuizOption) {
+    setAnswers((current) => ({ ...current, [questionId]: option }));
+    window.history.replaceState({}, '', `${window.location.pathname}`);
+    setQuizMessage('');
+    setShareMessage('');
+  }
+
+  function goPrevious() {
+    setCurrentIndex((index) => Math.max(0, index - 1));
+    setQuizMessage('');
+  }
+
+  function goNext() {
+    if (!answers[currentQuestion.id]) {
+      setQuizMessage('請先選擇一個答案。');
+      return;
+    }
+
+    setCurrentIndex((index) => Math.min(quizQuestions.length - 1, index + 1));
+    setQuizMessage('');
+  }
+
+  function analyzeResult() {
+    if (!answers[currentQuestion.id]) {
+      setQuizMessage('請先選擇一個答案。');
+      return;
+    }
+
+    if (!isComplete) {
+      setQuizMessage(`還有 ${quizQuestions.length - answeredCount} 題尚未完成。`);
+      return;
+    }
+
+    setView('result');
+    setQuizMessage('');
+    setShareMessage('');
+    window.history.replaceState({}, '', `${window.location.pathname}?result=${encodeQuizAnswers(answers)}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetQuiz() {
+    setAnswers({});
+    setCurrentIndex(0);
+    setView('quiz');
+    setQuizMessage('');
+    setShareMessage('');
+    window.history.replaceState({}, '', `${window.location.pathname}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function returnToQuiz() {
+    setView('quiz');
+    setShareMessage('');
+    window.history.replaceState({}, '', `${window.location.pathname}`);
+  }
+
+  async function copyShareUrl() {
+    const shareUrl = window.location.href;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareMessage('已複製分享連結');
+    } catch {
+      const input = document.getElementById('quiz-share-url') as HTMLInputElement | null;
+      input?.select();
+      setShareMessage('已選取連結，請手動複製');
+    }
+  }
+
+  if (view === 'result') {
+    return (
+      <main className="quiz-page">
+        <section className="quiz-result-page">
+          <div className="quiz-result-showcase">
+            {result.profile.image && (
+              <ProfileCard
+                className="quiz-profile-card"
+                name={result.profile.title}
+                title={result.profile.trait}
+                handle={result.profile.english || result.profile.title}
+                status="Pickle Today"
+                contactText="Share"
+                avatarUrl={assetPath(result.profile.image)}
+                showUserInfo={false}
+                enableTilt
+                enableMobileTilt={false}
+                behindGlowColor="rgba(125, 190, 255, 0.1)"
+                behindGlowEnabled={true}
+                innerGradient="linear-gradient(145deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.08) 100%)"
+              />
+            )}
+            <div className="quiz-result-card quiz-result-card-large">
+              <span className="quiz-result-label">測驗結果</span>
+              <h2>{result.profile.title}</h2>
+              <p className="quiz-result-subtitle">{result.profile.trait}</p>
+              {/*<div className="quiz-counts">*/}
+              {/*  <span>A {result.counts.A}</span>*/}
+              {/*  <span>B {result.counts.B}</span>*/}
+              {/*  <span>C {result.counts.C}</span>*/}
+              {/*  <span>D {result.counts.D}</span>*/}
+              {/*</div>*/}
+              <p>{result.profile.description}</p>
+              {/*{result.counts.D > 0 && (*/}
+              {/*  <p className="quiz-d-note">D 細分：角度/死角 {result.assassinD} 題，全能/補位 {result.druidD} 題。</p>*/}
+              {/*)}*/}
+              <label className="quiz-share-label" htmlFor="quiz-share-url">分享結果連結</label>
+              <div className="quiz-share-row">
+                <input
+                  id="quiz-share-url"
+                  className="quiz-share-url"
+                  readOnly
+                  value={window.location.href}
+                  onFocus={(event) => event.currentTarget.select()}
+                />
+                <button type="button" className="quiz-copy-button" onClick={copyShareUrl}>複製</button>
+              </div>
+              {shareMessage && <p className="quiz-share-status">{shareMessage}</p>}
+              <div className="quiz-actions">
+                <button type="button" onClick={returnToQuiz}>返回修改答案</button>
+                <button type="button" className="secondary" onClick={resetQuiz}>重新作答</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className="quiz-page">
+      <section className="quiz-hero">
+        <div>
+          <p className="quiz-kicker">Pickle Today 測驗所</p>
+          <h2>匹克職業傾向測驗</h2>
+          <p>10 題情境選擇，找出你的核心匹克職業流派。</p>
+        </div>
+        <div className="quiz-progress" aria-label="作答進度">
+          <strong>{currentIndex + 1}</strong>
+          <span>/ {quizQuestions.length} 題</span>
+        </div>
+      </section>
+
+      <section className="quiz-step">
+        <article className="quiz-question">
+          <div className="quiz-step-meta">
+            <span>已完成 {answeredCount} / {quizQuestions.length}</span>
+          </div>
+          <h3>Q{currentQuestion.id}. {currentQuestion.prompt}</h3>
+          <div className="quiz-options">
+            {(Object.keys(currentQuestion.options) as QuizOption[]).map((option) => (
+              <label className={`quiz-option ${answers[currentQuestion.id] === option ? 'selected' : ''}`} key={option}>
+                <input
+                  type="radio"
+                  name={`question-${currentQuestion.id}`}
+                  checked={answers[currentQuestion.id] === option}
+                  onChange={() => updateAnswer(currentQuestion.id, option)}
+                />
+                <span className="quiz-option-key">{option}</span>
+                <span>{currentQuestion.options[option]}</span>
+              </label>
+            ))}
+          </div>
+          {quizMessage && <p className="quiz-alert">{quizMessage}</p>}
+          <div className="quiz-actions">
+            <button type="button" className="secondary" onClick={goPrevious} disabled={isFirstQuestion}>上一題</button>
+            {!isLastQuestion ? (
+              <button type="button" onClick={goNext}>下一題</button>
+            ) : (
+              <button type="button" className="quiz-analyze" onClick={analyzeResult}>分析結果</button>
+            )}
+          </div>
+        </article>
+      </section>
+    </main>
+  );
+}
+
 function HomeBanner() {
   return (
-    <picture className="home-banner">
-      <source media="(max-width: 640px)" srcSet={assetPath('banner_phone.jpeg')} />
-      <img src={assetPath('banner_web.jpeg')} alt="Pickle Today" />
-    </picture>
+    <>
+      <picture className="home-banner">
+        <source media="(max-width: 640px)" srcSet={assetPath('banner_phone.jpeg')} />
+        <img src={assetPath('banner_web.jpeg')} alt="Pickle Today" />
+      </picture>
+      <section className="home-contact" aria-label="聯絡資訊">
+        <span>聯絡資訊</span>
+        <a href="https://www.threads.com/@sanmo_daily" target="_blank" rel="noreferrer">
+          @sanmo_daily
+        </a>
+      </section>
+    </>
   );
 }
 
@@ -205,6 +654,7 @@ function App() {
   const timerRef = useRef<number | null>(null);
   const courtRef = useRef<SVGSVGElement | null>(null);
   const isTacticalPage = window.location.pathname.endsWith('/tactical-analysis.html');
+  const isQuizPage = window.location.pathname.endsWith('/quiz.html');
 
   const derived = useMemo(() => {
     const opponentBaseDeg = Math.atan2(controls.defender.y - controls.opponent.y, controls.defender.x - controls.opponent.x) * 180 / Math.PI;
@@ -406,7 +856,9 @@ function App() {
           )}
         </div>
 
-        {!isTacticalPage && <HomeBanner />}
+        {!isTacticalPage && !isQuizPage && <HomeBanner />}
+
+        {isQuizPage && <QuizPage />}
 
         {isTacticalPage && (
           <div className="content">
