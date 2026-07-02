@@ -49,6 +49,7 @@ type CareerType = 'pending' | 'berserker' | 'paladin' | 'mage' | 'assassin' | 'd
 type QuizQuestion = {
   id: number;
   prompt: string;
+  image: string;
   options: Record<QuizOption, string>;
   dType?: 'assassin' | 'druid';
 };
@@ -218,6 +219,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 1,
     prompt: '當對手打出一顆非常高、有機會直接得分的網前高球（Pop-up）時，你的第一直覺反應是？',
+    image: 'q1_img.webp',
     dType: 'druid',
     options: {
       A: '全力起跳，用最猛烈的殺球（Smash）把球砸向對手腳邊',
@@ -229,6 +231,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 2,
     prompt: '在雙打比賽中，你最喜歡與哪一種打法特質的隊友組隊？',
+    image: 'q2_img.webp',
     dType: 'druid',
     options: {
       A: '能夠瘋狂進攻、幫我製造最後一擊機會的重砲手',
@@ -240,6 +243,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 3,
     prompt: '當你被對手連續重扣、陷入極度被動的防守劣勢時，你通常會怎麼應對？',
+    image: 'q3_img.webp',
     dType: 'assassin',
     options: {
       A: '找機會硬碰硬，直接在底線跟對手對抽重球拼輸贏',
@@ -251,6 +255,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 4,
     prompt: '你認為在匹克球場上，最讓你感到痛快、有成就感的瞬間是？',
+    image: 'q4_img.webp',
     dType: 'assassin',
     options: {
       A: '用絕對的力量與速度正面貫穿對手的防線',
@@ -262,6 +267,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 5,
     prompt: '關於網前的「廚房線（Non-Volley Zone）」爭奪戰，你的核心戰術通常是？',
+    image: 'q5_img.webp',
     dType: 'druid',
     options: {
       A: '不想跟對方慢慢磨，找機會就要發力重抽打破僵局',
@@ -273,6 +279,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 6,
     prompt: '比賽進行到關鍵局，你的發球局到了。此時你最想發出什麼樣的球？',
+    image: 'q6_img.webp',
     dType: 'assassin',
     options: {
       A: '貼著網頂、球速極快的強力平擊發球，直接壓迫對方到底線',
@@ -284,6 +291,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 7,
     prompt: '當你發現對手有「退到底線後方」的防守習慣，你會採取什麼攻擊策略？',
+    image: 'q7_img.webp',
     dType: 'assassin',
     options: {
       A: '在底線瘋狂與對方展開重抽大戰，用力量壓垮對方',
@@ -295,6 +303,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 8,
     prompt: '當你面對對手連續不斷的猛烈重扣攻擊時，你最直覺、也最常做出的回擊方式是？',
+    image: 'q8_img.webp',
     dType: 'assassin',
     options: {
       A: '用更大的力氣跟對手正面對抽，試圖用更快的速度正面壓制回去',
@@ -306,6 +315,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 9,
     prompt: '當你的隊友在場上突然體力下滑、失誤變多，導致陷入僵局時，你通常會採取什麼樣的打法調整？',
+    image: 'q9_img.webp',
     dType: 'assassin',
     options: {
       A: '增加主動發力攻擊的次數，試圖用個人突破與力量強攻來幫隊友分擔壓力',
@@ -317,6 +327,7 @@ const quizQuestions: QuizQuestion[] = [
   {
     id: 10,
     prompt: '如果你在場上看到對手兩個人都擠在球場正中央、防線大開時，你的最佳擊球選擇會是？',
+    image: 'q10_img.webp',
     dType: 'assassin',
     options: {
       A: '對準其中一人的胸口或腳邊，用盡全身力氣打出一顆超高速的正面追身球',
@@ -338,7 +349,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     title: '匹克狂戰士',
     english: 'Berserker',
     trait: '力量強攻派',
-    image: '匹克狂戰士.png',
+    image: '匹克狂戰士.webp',
     resultPage: 'result-berserker.html',
     description: '「進攻就是最好的防守！」你擁有無與倫比的進攻慾望與力量爆發。底線重抽與網前重扣是你的招牌技能。你追求用球速直接貫穿對手的防線，是不給對手任何喘息空間的絕對進攻核心。',
   },
@@ -346,7 +357,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     title: '匹克聖騎士',
     english: 'Paladin',
     trait: '防禦控制派',
-    image: '匹克聖戰士.png',
+    image: '匹克聖戰士.webp',
     resultPage: 'result-paladin.html',
     description: '「銅牆鐵壁，堅不可摧。」你是球場上最穩健的盾牌。擁有驚人的耐心與細膩手感，擅長吸收對手的所有重扣，並將球速完美重設（Reset）。你用無解的防守磨光對手的耐性，直到對方自亂陣腳。',
   },
@@ -354,7 +365,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     title: '匹克法師',
     english: 'Mage',
     trait: '旋轉派',
-    image: '匹克法師.png',
+    image: '匹克法師.webp',
     resultPage: 'result-mage.html',
     description: '「軌跡多變，變幻莫測。」你擊出的每一顆球都像是附加了狀態異常（Debuff）。你擅長操控強烈的上旋、下旋與側旋，讓球落地後產生極其詭譎的彈跳。對手在你面前往往頻頻打鐵，完全抓不到擊球節奏。',
   },
@@ -362,7 +373,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     title: '匹克刺客',
     english: 'Assassin',
     trait: '角度派',
-    image: '匹克刺客.png',
+    image: '匹克刺客.webp',
     resultPage: 'result-assassin.html',
     description: '「不拼蠻力，一擊必殺。」你是步伐輕盈的球場藝術家。你不會一味盲目發力，而是像老練的獵人一樣，冷靜捕捉對手陣型拉開的瞬間。利用大角度斜對角、極邊線球等刁鑽落點，直接切入對手意想不到的死角。',
   },
@@ -370,7 +381,7 @@ const careerProfiles: Record<CareerType, CareerProfile> = {
     title: '匹克德魯伊',
     english: 'Druid',
     trait: '全能派',
-    image: '匹克德魯伊.png',
+    image: '匹克德魯伊.webp',
     resultPage: 'result-druid.html',
     description: '「形態百變，隨機應變。」你是雙打搭檔最想遇到的萬金油隊友。能攻能守的你，前一拍還在和對手溫柔地網前鬥小球，下一拍抓到機會立刻化身重砲手。你能根據戰局和隊友狀態隨時切換形態，是全方位的戰術家。',
   },
@@ -399,7 +410,7 @@ function getQuizResult(answers: Partial<Record<number, QuizOption>>) {
   const leaders = (Object.keys(counts) as QuizOption[]).filter((option) => counts[option] === maxCount);
   if (leaders.includes('D')) {
     return {
-      profile: druidD > assassinD ? careerProfiles.druid : careerProfiles.assassin,
+      profile: druidD >= 2 ? careerProfiles.druid : careerProfiles.assassin,
       counts,
       assassinD,
       druidD,
@@ -460,6 +471,14 @@ function QuizPage() {
   const isFirstQuestion = currentIndex === 0;
   const isLastQuestion = currentIndex === quizQuestions.length - 1;
   const result = getQuizResult(answers);
+  const currentQuestionImage = (() => {
+    if (currentQuestion.id === 2 && answers[1] === 'A') return 'q2-1_img.webp';
+    if (currentQuestion.id === 6 && answers[5] === 'D') return 'q6-1_img.webp';
+    if (currentQuestion.id === 7 && answers[6] === 'A') return 'q7-1_img.webp';
+    if (currentQuestion.id === 9 && answers[8] === 'A') return 'q9-1_img.webp';
+    if (currentQuestion.id === 10 && answers[9] === 'A') return 'q10-1_img.webp';
+    return currentQuestion.image;
+  })();
 
   function updateAnswer(questionId: number, option: QuizOption) {
     setAnswers((current) => ({ ...current, [questionId]: option }));
@@ -608,6 +627,9 @@ function QuizPage() {
             <span>已完成 {answeredCount} / {quizQuestions.length}</span>
           </div>
           <h3>Q{currentQuestion.id}. {currentQuestion.prompt}</h3>
+          <figure className="quiz-question-media">
+            <img src={assetPath(currentQuestionImage)} alt={`Q${currentQuestion.id} 情境示意圖`} />
+          </figure>
           <div className="quiz-options">
             {(Object.keys(currentQuestion.options) as QuizOption[]).map((option) => (
               <label className={`quiz-option ${answers[currentQuestion.id] === option ? 'selected' : ''}`} key={option}>
@@ -641,8 +663,8 @@ function HomeBanner() {
   return (
     <>
       <picture className="home-banner">
-        <source media="(max-width: 640px)" srcSet={assetPath('banner_phone.jpeg')} />
-        <img src={assetPath('banner_web.jpeg')} alt="Pickle Today" />
+        <source media="(max-width: 640px)" srcSet={assetPath('banner_phone.webp')} />
+        <img src={assetPath('banner_web.webp')} alt="Pickle Today" />
       </picture>
       <section className="home-contact" aria-label="聯絡資訊">
         <span>聯絡資訊</span>
@@ -890,7 +912,7 @@ function App() {
 
               <g className="svg-drag" transform={`translate(${controls.opponent.x - OPPONENT_HOME.x},${controls.opponent.y - OPPONENT_HOME.y})`} onPointerDown={startDragging('opponent')}>
                 <rect x="40" y="58" width="150" height="112" fill="transparent" />
-                <image href={assetPath('person_top_1.png')} x="48" y="65" width="134" height="94" preserveAspectRatio="xMidYMid meet" />
+                <image href={assetPath('person_top_1.webp')} x="48" y="65" width="134" height="94" preserveAspectRatio="xMidYMid meet" />
                 <circle cx="110" cy="120" r="10" fill="#ef4444" stroke="white" strokeWidth="3" />
                 <text x="134" y="126" fontSize="17" fontWeight="800" fill="#ef4444" stroke="white" strokeWidth="3" paintOrder="stroke">對手A</text>
               </g>
@@ -905,7 +927,7 @@ function App() {
 
               <g className="svg-drag" transform={`translate(${controls.ball.x - INCOMING_HOME.x},${controls.ball.y - INCOMING_HOME.y})`} onPointerDown={startDragging('ball')}>
                 <rect x="72" y="832" width="154" height="150" fill="transparent" />
-                <image href={assetPath('person_bottom_1.png')} x="82" y="837" width="134" height="124" preserveAspectRatio="xMidYMid meet" />
+                <image href={assetPath('person_bottom_1.webp')} x="82" y="837" width="134" height="124" preserveAspectRatio="xMidYMid meet" />
                 <circle cx="149" cy="909" r="10" fill="#2563eb" stroke="white" strokeWidth="3" />
                 <text x="172" y="915" fontSize="17" fontWeight="800" fill="#2563eb" stroke="white" strokeWidth="3" paintOrder="stroke">防守B</text>
               </g>
@@ -923,14 +945,14 @@ function App() {
 
               <g className="svg-drag" transform={`translate(${controls.defender.x - DEFENDER_HOME.x},${controls.defender.y - DEFENDER_HOME.y})`} onPointerDown={startDragging('defender')}>
                 <rect x="183" y="719" width="154" height="150" fill="transparent" />
-                <image href={assetPath('person_bottom_2.png')} x="189" y="732" width="142" height="109" preserveAspectRatio="xMidYMid meet" />
+                <image href={assetPath('person_bottom_2.webp')} x="189" y="732" width="142" height="109" preserveAspectRatio="xMidYMid meet" />
                 <circle cx="260" cy="796" r="10" fill="#2563eb" stroke="white" strokeWidth="3" />
                 <text x="283" y="802" fontSize="17" fontWeight="800" fill="#2563eb" stroke="white" strokeWidth="3" paintOrder="stroke">防守A</text>
               </g>
 
               <g className="svg-drag" transform={`translate(${controls.hit.x},${controls.hit.y})`} onPointerDown={startDragging('hit')}>
                 <rect x="-86" y="-82" width="166" height="126" fill="transparent" />
-                <image href={assetPath('person_top_2.png')} x="-78" y="-78" width="140" height="98" preserveAspectRatio="xMidYMid meet" />
+                <image href={assetPath('person_top_2.webp')} x="-78" y="-78" width="140" height="98" preserveAspectRatio="xMidYMid meet" />
                 <circle r="10" fill="#ef4444" stroke="white" strokeWidth="3" />
                 <text x="22" y="-8" fontSize="18" fontWeight="700" fill="#ef4444" stroke="white" strokeWidth="3" paintOrder="stroke">對手B</text>
               </g>

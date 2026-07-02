@@ -265,6 +265,20 @@ body{
     font-size:16px;
     line-height:1.6;
 }
+.quiz-question-media{
+    width:min(100%, 520px);
+    margin:0 auto 14px;
+    overflow:hidden;
+    aspect-ratio:4 / 5;
+    border-radius:8px;
+    background:#eef2f7;
+}
+.quiz-question-media img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
 .quiz-options{
     display:grid;
     gap:8px;
@@ -569,6 +583,10 @@ button.secondary{background:#e5e7eb;color:#1f2933}
     }
     .quiz-question{
         padding:14px;
+    }
+    .quiz-question-media{
+        width:100%;
+        margin-bottom:12px;
     }
     .quiz-result-card-large{
         padding:16px;
