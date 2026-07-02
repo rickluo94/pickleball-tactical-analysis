@@ -393,12 +393,13 @@ body{
 }
 .quiz-share-row{
     display:grid;
-    grid-template-columns:minmax(0, 1fr) auto;
+    grid-template-columns:minmax(0, 1fr) auto auto;
     gap:8px;
 }
 .quiz-copy-button{
     padding:10px 14px;
     background:#2563eb;
+    white-space:nowrap;
 }
 .quiz-share-status{
     margin:8px 0 0;

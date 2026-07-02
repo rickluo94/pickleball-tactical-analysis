@@ -548,6 +548,64 @@ function QuizPage() {
     }
   }
 
+  async function imageUrlToPngBlob(imageUrl: string) {
+    const image = new Image();
+    image.crossOrigin = 'anonymous';
+
+    await new Promise<void>((resolve, reject) => {
+      image.onload = () => resolve();
+      image.onerror = () => reject(new Error('圖片載入失敗'));
+      image.src = imageUrl;
+    });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = image.naturalWidth;
+    canvas.height = image.naturalHeight;
+
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('無法建立圖片畫布');
+
+    context.drawImage(image, 0, 0);
+
+    return new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('圖片轉換失敗'));
+        }
+      }, 'image/png');
+    });
+  }
+
+  async function createResultImageFile() {
+    if (!result.profile.image) throw new Error('目前沒有可分享的結果圖片');
+
+    const imageUrl = new URL(assetPath(result.profile.image), window.location.href).href;
+    const pngBlob = await imageUrlToPngBlob(imageUrl);
+    return new File([pngBlob], `${result.profile.english || result.profile.title}.png`, { type: pngBlob.type });
+  }
+
+  async function shareResultImage() {
+    try {
+      const resultImageFile = await createResultImageFile();
+      const shareData: ShareData = {
+        title: result.profile.title,
+        text: result.profile.trait,
+        files: [resultImageFile],
+      };
+
+      if (!navigator.share || (navigator.canShare && !navigator.canShare(shareData))) {
+        throw new Error('瀏覽器不支援圖片分享');
+      }
+
+      await navigator.share(shareData);
+      setShareMessage('已開啟圖片分享');
+    } catch {
+      setShareMessage('此瀏覽器不支援直接分享圖片，請長按結果圖片儲存或使用複製連結');
+    }
+  }
+
   if (view === 'result') {
     return (
       <main className="quiz-page">
@@ -594,6 +652,7 @@ function QuizPage() {
                   onFocus={(event) => event.currentTarget.select()}
                 />
                 <button type="button" className="quiz-copy-button" onClick={copyShareUrl}>複製</button>
+                <button type="button" className="quiz-copy-button" onClick={shareResultImage}>分享圖片</button>
               </div>
               {shareMessage && <p className="quiz-share-status">{shareMessage}</p>}
               <div className="quiz-actions">
