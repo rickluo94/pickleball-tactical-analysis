@@ -67,8 +67,8 @@ type InventoryItem = {
   id: string;
   name: string;
   roles: string[];
-  cover: string;
-  shop: string;
+  cover: string | null;
+  shop: string | null;
   images: string[];
 };
 
@@ -285,6 +285,28 @@ const inventoryItems: InventoryItem[] = [
       'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0p-mb6hokwfktsm71@resize_w450_nl.webp',
       'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0s-mb6homjj6cewe5@resize_w450_nl.webp',
       'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0u-mb6hnc611gm0ff@resize_w450_nl.webp',
+    ],
+  },
+  {
+    id: 'BGM_72006',
+    name: 'BGM_72006',
+    roles: ['匹克狂戰士', '匹克刺客', '匹克法師','匹克德魯伊'],
+    cover: 'shoes/BGM_72006/1770954871_8d267ee2c10a9a0cb0dd.avif',
+    shop: null,
+    images: [
+      'shoes/BGM_72006/1770954871_503d6c83c792044bd91f.avif',
+      'shoes/BGM_72006/1770954871_a147d48e308bc2267ae0.avif',
+      'shoes/BGM_72006/1770955026_a165587ced5d9e6c0c01.avif',
+      'shoes/BGM_72006/1770954871_8d267ee2c10a9a0cb0dd.avif',
+      'shoes/BGM_72006/1770954871_eb78009887833286a541.avif',
+      'shoes/BGM_72006/1770954871_d416272ef0ac9476376d.avif',
+      'shoes/BGM_72006/1770954971_d595b661455c1df45dde.avif',
+      'shoes/BGM_72006/1770954871_1588e7794ab5ea938013.avif',
+      'shoes/BGM_72006/1770263137_7541cbc75ec242d87e77.avif',
+      'shoes/BGM_72006/1770954871_0465db84917c2f2c0de9.avif',
+      'shoes/BGM_72006/1770954871_a47331d3616fcb766cce.avif',
+      'shoes/BGM_72006/1770954871_94f1ccbec55555e6acd3.avif',
+      'shoes/BGM_72006/1770954871_b4c438eb6e64c2def5f0.avif',
     ],
   },
   {
@@ -817,16 +839,24 @@ function HomeBanner() {
   );
 }
 
+function inventoryItemCover(item: InventoryItem) {
+  return item.cover ?? item.images[0] ?? null;
+}
+
 function InventoryPage() {
   const [selectedId, setSelectedId] = useState(inventoryItems[0].id);
   const [imageIndex, setImageIndex] = useState(0);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isClickHintActive, setIsClickHintActive] = useState(true);
   const selectedItem = inventoryItems.find((item) => item.id === selectedId) ?? inventoryItems[0];
-  const selectedImage = selectedItem.images[imageIndex] ?? selectedItem.cover;
+  const selectedImage = selectedItem.images[imageIndex] ?? inventoryItemCover(selectedItem);
   const hasMultipleImages = selectedItem.images.length > 1;
 
   function selectItem(itemId: string) {
     setSelectedId(itemId);
     setImageIndex(0);
+    setIsDetailOpen(true);
+    setIsClickHintActive(false);
   }
 
   function goDetailImage(direction: -1 | 1) {
@@ -836,53 +866,97 @@ function InventoryPage() {
     });
   }
 
+  useEffect(() => {
+    if (!isDetailOpen) {
+      return undefined;
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setIsDetailOpen(false);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDetailOpen]);
+
+  useEffect(() => {
+    const hintTimer = window.setTimeout(() => setIsClickHintActive(false), 4200);
+    return () => window.clearTimeout(hintTimer);
+  }, []);
+
   return (
     <main className="inventory-page">
       <section className="inventory-layout">
         <div className="inventory-board" aria-label="Inventory 物品欄">
           <img className="inventory-frame" src={assetPath('inventory/Inventory.webp')} alt="" aria-hidden="true" />
-          <div className="inventory-grid">
-            {inventoryItems.map((item) => (
-              <button
-                type="button"
-                className={`inventory-slot ${selectedItem.id === item.id ? 'selected' : ''}`}
-                key={item.id}
-                onClick={() => selectItem(item.id)}
-                aria-pressed={selectedItem.id === item.id}
-              >
-                <img src={assetPath(item.cover)} alt={item.name} />
-              </button>
-            ))}
+          <div className={`inventory-grid ${isClickHintActive ? 'hint-active' : ''}`}>
+            {inventoryItems.map((item) => {
+              const cover = inventoryItemCover(item);
+              return (
+                <button
+                  type="button"
+                  className={`inventory-slot ${selectedItem.id === item.id ? 'selected' : ''}`}
+                  key={item.id}
+                  onClick={() => selectItem(item.id)}
+                  aria-pressed={selectedItem.id === item.id}
+                >
+                  {cover ? <img src={assetPath(cover)} alt={item.name} /> : <span>{item.name}</span>}
+                </button>
+              );
+            })}
           </div>
         </div>
-
-        <aside className="inventory-detail" aria-label="物品細節">
-          <div className="inventory-detail-image">
-            {selectedItem.shop && <span className="inventory-shop-badge">外站商品</span>}
-            <img src={assetPath(selectedImage)} alt={`${selectedItem.name} 放大圖`} />
-          </div>
-          <div className="inventory-detail-info">
-            <span className="inventory-detail-label">當前選擇物品</span>
-            <h2>{selectedItem.name}</h2>
-            <div className="inventory-role-list">
-              {selectedItem.roles.map((role) => (
-                <span key={role}>{role}</span>
-              ))}
-            </div>
-            {selectedItem.shop && (
-              <a className="inventory-shop-link" href={selectedItem.shop} target="_blank" rel="noreferrer">
-                查看武器詳情
-                <span aria-hidden="true">→</span>
-              </a>
-            )}
-            <div className="inventory-detail-actions">
-              <button type="button" className="secondary" onClick={() => goDetailImage(-1)} disabled={!hasMultipleImages}>上一張</button>
-              <span>{imageIndex + 1} / {selectedItem.images.length}</span>
-              <button type="button" onClick={() => goDetailImage(1)} disabled={!hasMultipleImages}>下一張</button>
-            </div>
-          </div>
-        </aside>
       </section>
+      {isDetailOpen && (
+        <div className="inventory-drawer-shell" role="presentation" onClick={() => setIsDetailOpen(false)}>
+          <aside
+            className="inventory-detail inventory-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="物品細節"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="inventory-drawer-close"
+              onClick={() => setIsDetailOpen(false)}
+              aria-label="關閉物品細節"
+            >
+              ←
+            </button>
+            <div className="inventory-detail-image">
+              {selectedItem.shop && <span className="inventory-shop-badge">外站商品</span>}
+              {selectedImage ? (
+                <img src={assetPath(selectedImage)} alt={`${selectedItem.name} 放大圖`} />
+              ) : (
+                <span className="inventory-empty-image">尚無圖片</span>
+              )}
+            </div>
+            <div className="inventory-detail-info">
+              <span className="inventory-detail-label">當前選擇物品</span>
+              <h2>{selectedItem.name}</h2>
+              <div className="inventory-role-list">
+                {selectedItem.roles.map((role) => (
+                  <span key={role}>{role}</span>
+                ))}
+              </div>
+              {selectedItem.shop && (
+                <a className="inventory-shop-link" href={selectedItem.shop} target="_blank" rel="noreferrer">
+                  查看武器詳情
+                  <span aria-hidden="true">→</span>
+                </a>
+              )}
+              <div className="inventory-detail-actions">
+                <button type="button" className="secondary" onClick={() => goDetailImage(-1)} disabled={!hasMultipleImages}>上一張</button>
+                <span>{imageIndex + 1} / {selectedItem.images.length}</span>
+                <button type="button" onClick={() => goDetailImage(1)} disabled={!hasMultipleImages}>下一張</button>
+              </div>
+            </div>
+          </aside>
+        </div>
+      )}
     </main>
   );
 }
@@ -1095,7 +1169,7 @@ function App() {
             <p>可透過拖曳直接調整對手拍子位置，並分析攻擊角度、直線威脅與對角威脅。</p>
           )}
           {isInventoryPage && (
-            <p>選擇背包格中的球拍，查看放大圖、推薦職業與商品細節。</p>
+            <p>選擇背包格中的物品，查看放大圖、推薦職業與商品細節。</p>
           )}
         </div>
 
