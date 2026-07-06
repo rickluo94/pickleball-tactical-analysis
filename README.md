@@ -20,3 +20,27 @@ npm run build
 ### 無情工商
 
 [【JINHOPA】高階匹克球拍｜摩擦回饋｜緩衝核心｜輕量化](https://shopee.tw/product/1345340496/50554287939)
+
+#### 職業推薦對應
+
+`XSPAK_PRO_LH`
+
+- 匹克德魯伊
+- 匹克聖騎士
+- 匹克刺客
+
+`XSPAK_EXTRASPIN_1_0_12K`
+
+- 匹克聖騎士
+- 匹克刺客
+
+`YC_DGYCASI_T700`
+
+- 匹克德魯伊
+- 匹克聖騎士
+
+`YC_DGYCASI_PRO_MAX`
+
+- 匹克狂戰士
+- 匹克刺客
+- 匹克法師
