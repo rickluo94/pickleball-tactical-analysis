@@ -16,6 +16,7 @@ export default defineConfig({
         index: resolve(__dirname, 'index.html'),
         tacticalAnalysis: resolve(__dirname, 'tactical-analysis.html'),
         quiz: resolve(__dirname, 'quiz.html'),
+        inventory: resolve(__dirname, 'inventory.html'),
         resultBerserker: resolve(__dirname, 'result-berserker.html'),
         resultPaladin: resolve(__dirname, 'result-paladin.html'),
         resultMage: resolve(__dirname, 'result-mage.html'),

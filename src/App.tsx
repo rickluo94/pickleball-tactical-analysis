@@ -63,6 +63,15 @@ type CareerProfile = {
   resultPage?: string;
 };
 
+type InventoryItem = {
+  id: string;
+  name: string;
+  roles: string[];
+  cover: string;
+  shop: string;
+  images: string[];
+};
+
 const VIEWBOX_WIDTH = 520;
 const VIEWBOX_HEIGHT = 1024;
 const COURT_CENTER_X = 260;
@@ -205,6 +214,7 @@ function SiteNav() {
       </h1>
       <div className="site-nav-links">
         <a className="site-nav-link" href="quiz.html">匹克職業傾向測驗</a>
+        <a className="site-nav-link" href="inventory.html">裝備背包</a>
         <a className="site-nav-link" href="course.html">技能修練</a>
         <a className="site-nav-link" href="friendly-schedule.html">友誼賽程</a>
         <a className="site-nav-link" href="tips.html">Tips小技巧</a>
@@ -214,6 +224,78 @@ function SiteNav() {
     </nav>
   );
 }
+
+const inventoryItems: InventoryItem[] = [
+  {
+    id: 'XSPAK_PRO_LH',
+    name: 'XSPAK_PRO_LH',
+    roles: ['匹克德魯伊', '匹克聖騎士', '匹克刺客'],
+    cover: 'paddle/XSPAK_PRO_LH/5445abc21ecfbca.jpg',
+    shop: 'https://shopee.tw/product/1345340496/57063453466/',
+    images: [
+      'paddle/XSPAK_PRO_LH/5445abc21ecfbca.jpg',
+      'paddle/XSPAK_PRO_LH/efc10db8747bfae.jpg',
+      'paddle/XSPAK_PRO_LH/b5a2e841a9d34b9.jpg',
+      'paddle/XSPAK_PRO_LH/636d245a690b.jpg',
+    ],
+  },
+  {
+    id: 'XSPAK_EXTRASPIN_1_0_12K',
+    name: 'XSPAK_EXTRASPIN_1_0_12K',
+    roles: ['匹克聖騎士', '匹克刺客'],
+    cover: 'paddle/XSPAK_EXTRASPIN_1_0_12K/ea1681e82f9a3ab.jpg',
+    shop: 'https://shopee.tw/product/1345340496/50413460817/',
+    images: [
+      'paddle/XSPAK_EXTRASPIN_1_0_12K/ea1681e82f9a3ab.jpg',
+      'paddle/XSPAK_EXTRASPIN_1_0_12K/4d067d98e0c5684.jpg',
+      'paddle/XSPAK_EXTRASPIN_1_0_12K/d505fc5afd55ab2.jpg',
+      'paddle/XSPAK_EXTRASPIN_1_0_12K/153710bc0b0b.jpg',
+      'paddle/XSPAK_EXTRASPIN_1_0_12K/1ec24682d0f1dac.jpg',
+    ],
+  },
+  {
+    id: 'YC_DGYCASI_T700',
+    name: 'YC_DGYCASI_T700',
+    roles: ['匹克德魯伊', '匹克聖騎士'],
+    cover: 'paddle/YC_DGYCASI_T700/tw-11134207-81ztg-mfkwu1w9li4q04@resize_w450_nl.webp',
+    shop: 'https://shopee.tw/product/1345340496/51563453386/',
+    images: [
+      'paddle/YC_DGYCASI_T700/tw-11134207-81ztg-mfkwu1w9li4q04@resize_w450_nl.webp',
+      'paddle/YC_DGYCASI_T700/tw-11134207-81ztm-mfkwu1xhszkcbd@resize_w450_nl.webp',
+      'paddle/YC_DGYCASI_T700/71B7h0lAI2L._AC_SL1500_.jpg',
+      'paddle/YC_DGYCASI_T700/71Sg1oPJdWL._AC_SL1500_.jpg',
+      'paddle/YC_DGYCASI_T700/tw-11134207-81zth-mfkwtvc29oul55.webp',
+      'paddle/YC_DGYCASI_T700/71Dkgu1bahL._AC_SL1500_.jpg',
+      'paddle/YC_DGYCASI_T700/61uvNGmC6pL._AC_SL1500_.jpg',
+      'paddle/YC_DGYCASI_T700/71s-e5nIAqL._AC_SL1500_.jpg',
+      'paddle/YC_DGYCASI_T700/81vK-bYV8LL._AC_SL1500_.jpg',
+      'paddle/YC_DGYCASI_T700/71YiUHf2OOL._AC_SL1500_.jpg',
+      'paddle/YC_DGYCASI_T700/tw-11134207-81ztm-mfkwu1xrtzik81@resize_w450_nl.webp',
+    ],
+  },
+  {
+    id: 'YC_DGYCASI_PRO_MAX',
+    name: 'YC_DGYCASI_PRO_MAX',
+    roles: ['匹克狂戰士', '匹克刺客', '匹克法師'],
+    cover: 'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0p-mb6hnc611gief0.webp',
+    shop: 'https://shopee.tw/product/1345340496/57513449297/',
+    images: [
+      'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0p-mb6hnc611gief0.webp',
+      'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0p-mb6hnc612v2ua1@resize_w450_nl.webp',
+      'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0p-mb6hokwfktsm71@resize_w450_nl.webp',
+      'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0s-mb6homjj6cewe5@resize_w450_nl.webp',
+      'paddle/YC_DGYCASI_PRO_MAX/tw-11134207-7ra0u-mb6hnc611gm0ff@resize_w450_nl.webp',
+    ],
+  },
+  {
+    id: 'Overgrip_v1',
+    name: 'Overgrip_v1',
+    roles: ['補給品'],
+    cover: 'paddle/Overgrip_v1/tw-11134207-7ra0k-md6spi1tvygv55.webp',
+    shop: 'https://shopee.tw/product/1345340496/49213478985/',
+    images: ['paddle/Overgrip_v1/tw-11134207-7ra0k-md6spi1tvygv55.webp'],
+  },
+];
 
 const quizQuestions: QuizQuestion[] = [
   {
@@ -735,6 +817,76 @@ function HomeBanner() {
   );
 }
 
+function InventoryPage() {
+  const [selectedId, setSelectedId] = useState(inventoryItems[0].id);
+  const [imageIndex, setImageIndex] = useState(0);
+  const selectedItem = inventoryItems.find((item) => item.id === selectedId) ?? inventoryItems[0];
+  const selectedImage = selectedItem.images[imageIndex] ?? selectedItem.cover;
+  const hasMultipleImages = selectedItem.images.length > 1;
+
+  function selectItem(itemId: string) {
+    setSelectedId(itemId);
+    setImageIndex(0);
+  }
+
+  function goDetailImage(direction: -1 | 1) {
+    setImageIndex((current) => {
+      const total = selectedItem.images.length;
+      return (current + direction + total) % total;
+    });
+  }
+
+  return (
+    <main className="inventory-page">
+      <section className="inventory-layout">
+        <div className="inventory-board" aria-label="Inventory 物品欄">
+          <img className="inventory-frame" src={assetPath('inventory/Inventory.webp')} alt="" aria-hidden="true" />
+          <div className="inventory-grid">
+            {inventoryItems.map((item) => (
+              <button
+                type="button"
+                className={`inventory-slot ${selectedItem.id === item.id ? 'selected' : ''}`}
+                key={item.id}
+                onClick={() => selectItem(item.id)}
+                aria-pressed={selectedItem.id === item.id}
+              >
+                <img src={assetPath(item.cover)} alt={item.name} />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <aside className="inventory-detail" aria-label="物品細節">
+          <div className="inventory-detail-image">
+            {selectedItem.shop && <span className="inventory-shop-badge">外站商品</span>}
+            <img src={assetPath(selectedImage)} alt={`${selectedItem.name} 放大圖`} />
+          </div>
+          <div className="inventory-detail-info">
+            <span className="inventory-detail-label">當前選擇物品</span>
+            <h2>{selectedItem.name}</h2>
+            <div className="inventory-role-list">
+              {selectedItem.roles.map((role) => (
+                <span key={role}>{role}</span>
+              ))}
+            </div>
+            {selectedItem.shop && (
+              <a className="inventory-shop-link" href={selectedItem.shop} target="_blank" rel="noreferrer">
+                查看武器詳情
+                <span aria-hidden="true">→</span>
+              </a>
+            )}
+            <div className="inventory-detail-actions">
+              <button type="button" className="secondary" onClick={() => goDetailImage(-1)} disabled={!hasMultipleImages}>上一張</button>
+              <span>{imageIndex + 1} / {selectedItem.images.length}</span>
+              <button type="button" onClick={() => goDetailImage(1)} disabled={!hasMultipleImages}>下一張</button>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  );
+}
+
 function App() {
   const [controls, setControls] = useState<Controls>(initialControls);
   const [dragging, setDragging] = useState<DragTarget | null>(null);
@@ -742,6 +894,7 @@ function App() {
   const courtRef = useRef<SVGSVGElement | null>(null);
   const isTacticalPage = window.location.pathname.endsWith('/tactical-analysis.html');
   const isQuizPage = window.location.pathname.endsWith('/quiz.html') || /\/result-[a-z]+\.html$/.test(window.location.pathname);
+  const isInventoryPage = window.location.pathname.endsWith('/inventory.html');
 
   const derived = useMemo(() => {
     const opponentBaseDeg = Math.atan2(controls.defender.y - controls.opponent.y, controls.defender.x - controls.opponent.x) * 180 / Math.PI;
@@ -941,11 +1094,16 @@ function App() {
           {isTacticalPage && (
             <p>可透過拖曳直接調整對手拍子位置，並分析攻擊角度、直線威脅與對角威脅。</p>
           )}
+          {isInventoryPage && (
+            <p>選擇背包格中的球拍，查看放大圖、推薦職業與商品細節。</p>
+          )}
         </div>
 
-        {!isTacticalPage && !isQuizPage && <HomeBanner />}
+        {!isTacticalPage && !isQuizPage && !isInventoryPage && <HomeBanner />}
 
         {isQuizPage && <QuizPage />}
+
+        {isInventoryPage && <InventoryPage />}
 
         {isTacticalPage && (
           <div className="content">
