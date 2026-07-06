@@ -890,7 +890,10 @@ function InventoryPage() {
     <main className="inventory-page">
       <section className="inventory-layout">
         <div className="inventory-board" aria-label="Inventory 物品欄">
-          <img className="inventory-frame" src={assetPath('inventory/Inventory.webp')} alt="" aria-hidden="true" />
+          <picture>
+            <source media="(max-width: 640px)" srcSet={assetPath('inventory/inventory_mobile.png')} />
+            <img className="inventory-frame" src={assetPath('inventory/Inventory.webp')} alt="" aria-hidden="true" />
+          </picture>
           <div className={`inventory-grid ${isClickHintActive ? 'hint-active' : ''}`}>
             {inventoryItems.map((item) => {
               const cover = inventoryItemCover(item);
