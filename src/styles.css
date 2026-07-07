@@ -121,22 +121,12 @@ body{
 .inventory-board{
     position:relative;
     width:100%;
-    max-width:520px;
+    max-width:min(560px, calc(100vw - 36px));
     margin:0 auto;
-    aspect-ratio:352 / 332;
+    aspect-ratio:941 / 1672;
     border-radius:12px;
     overflow:hidden;
-    background:#c7c7c7;
-}
-@media(min-width:901px){
-    .inventory-board{
-        max-width:min(760px, calc(100vw - 36px));
-    }
-}
-.inventory-board picture{
-    display:block;
-    width:100%;
-    height:100%;
+    background:#d7d7d7;
 }
 .inventory-frame{
     display:block;
@@ -146,14 +136,14 @@ body{
 }
 .inventory-grid{
     position:absolute;
-    left:4%;
-    top:50%;
-    width:92%;
-    height:45.6%;
+    left:4.1%;
+    top:26.85%;
+    width:92.4%;
+    height:63.6%;
     display:grid;
-    grid-template-columns:repeat(9, minmax(0, 1fr));
-    grid-template-rows:repeat(4, minmax(0, 1fr));
-    gap:0;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    grid-template-rows:repeat(3, minmax(0, 1fr));
+    gap:8px;
 }
 .inventory-slot{
     position:relative;
@@ -162,12 +152,14 @@ body{
     justify-content:center;
     width:100%;
     min-width:0;
+    height:100%;
     aspect-ratio:1 / 1;
     padding:4px;
     border:2px solid transparent;
-    border-radius:0;
-    background:transparent;
+    border-radius:8px;
+    background:rgba(255,255,255,.16);
     box-shadow:none;
+    backdrop-filter:blur(1px);
     cursor:pointer;
 }
 .inventory-grid.hint-active .inventory-slot{
@@ -188,8 +180,8 @@ body{
 }
 .inventory-slot img{
     display:block;
-    max-width:100%;
-    max-height:100%;
+    max-width:96%;
+    max-height:96%;
     object-fit:contain;
     filter:drop-shadow(0 8px 10px rgba(0,0,0,.32));
 }
@@ -846,31 +838,9 @@ button.secondary{background:#e5e7eb;color:#1f2933}
     }
     .inventory-board{
         max-width:min(430px, 100%);
-        aspect-ratio:941 / 1672;
-        background:#d7d7d7;
     }
     .inventory-drawer-shell{
         padding:8px;
-    }
-    .inventory-grid{
-        left:4.1%;
-        top:26.85%;
-        width:92.4%;
-        height:63.6%;
-        grid-template-columns:repeat(2, minmax(0, 1fr));
-        grid-template-rows:repeat(3, minmax(0, 1fr));
-        gap:8px;
-    }
-    .inventory-slot{
-        height:100%;
-        padding:4px;
-        border-radius:8px;
-        background:rgba(255,255,255,.16);
-        backdrop-filter:blur(1px);
-    }
-    .inventory-slot img{
-        max-width:96%;
-        max-height:96%;
     }
     .inventory-detail{
         padding:14px;
