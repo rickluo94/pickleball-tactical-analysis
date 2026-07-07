@@ -1314,8 +1314,8 @@ function App() {
             <div className="note">
               說明：這是視覺化戰術判斷工具，主要用於理解拍面角度、擊球點位置與防守站位之間的關係。
             </div>
-            <a href="https://shopee.tw/product/1345340496/50554287939" target="_blank" rel="noreferrer">
-              小工商【JINHOPA】高階匹克球拍｜摩擦回饋｜緩衝核心｜輕量化
+            <a href="https://shopee.tw/jinhopa?categoryId=100637&entryPoint=ShopByPDP&itemId=50554287939" target="_blank" rel="noreferrer">
+              Pickle Today 推薦裝備商店
             </a>
           </aside>
         </div>

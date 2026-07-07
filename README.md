@@ -1,6 +1,6 @@
 # pickleball-tactical-analysis
 
-JINHOPA 匹克球戰術分析工具，已升級為 React + TypeScript + Vite。
+【Pickle Today】 匹克球戰術分析工具，已升級為 React + TypeScript + Vite。
 
 ## 開發
 
@@ -19,7 +19,7 @@ npm run build
 
 ### 無情工商
 
-[【JINHOPA】高階匹克球拍｜摩擦回饋｜緩衝核心｜輕量化](https://shopee.tw/product/1345340496/50554287939)
+[Pickle Today 推薦裝備商店](https://shopee.tw/jinhopa?categoryId=100637&entryPoint=ShopByPDP&itemId=50554287939)
 
 #### 職業推薦對應
 
