@@ -1,0 +1,139 @@
+.course-page {
+    --course-primary: #4caf50;
+    --course-dark: #388e3c;
+    --course-soft: #f4f7f4;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 28px 18px 44px;
+    color: #333;
+}
+
+.course-hero {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid var(--course-primary);
+}
+
+.course-hero h2 {
+    margin: 0 0 10px;
+    color: var(--course-dark);
+    font-size: clamp(30px, 6vw, 42px);
+    line-height: 1.35;
+}
+
+.course-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.course-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.course-tags span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--course-primary);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+.course-timeline {
+    display: grid;
+    gap: 25px;
+}
+
+.course-card {
+    padding: 24px;
+    border-left: 5px solid var(--course-primary);
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0,0,0,.1);
+    transition: transform .2s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-2px);
+}
+
+.course-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.course-card-header h3 {
+    margin: 0;
+    color: #111;
+    font-size: 21px;
+    line-height: 1.45;
+}
+
+.course-card-header span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 6px 12px;
+    border: 1px solid rgba(76,175,80,.2);
+    border-radius: 6px;
+    background: var(--course-soft);
+    color: var(--course-dark);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.course-card-header span::before {
+    content: "📅";
+    margin-right: 6px;
+}
+
+.course-card-body {
+    padding-top: 12px;
+    border-top: 1px dashed #eee;
+    background: #fcfcfc;
+}
+
+.course-card-body strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--course-dark);
+}
+
+.course-card-body p {
+    margin: 0;
+    color: #555;
+    line-height: 1.8;
+}
+
+@media (max-width: 640px) {
+    .course-page {
+        padding: 20px 12px 34px;
+    }
+
+    .course-card {
+        padding: 22px;
+    }
+
+    .course-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .course-card-header h3 {
+        font-size: 19px;
+    }
+}

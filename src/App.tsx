@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import CoursePage from './components/CoursePage';
+import PickleballRoadmap from './components/PickleballRoadmap';
 import ProfileCard from './components/ProfileCard';
 
 type Point = {
@@ -207,19 +209,51 @@ function RangeField({
 }
 
 function SiteNav() {
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const navLinks = [
+    { href: 'quiz.html', label: '匹克職業傾向測驗' },
+    { href: 'inventory.html', label: '裝備背包' },
+    { href: 'course.html', label: '技能修練' },
+    { href: 'roadmap.html', label: '學習路線' },
+    { href: 'friendly-schedule.html', label: '友誼賽程' },
+    { href: 'tips.html', label: 'Tips小技巧' },
+    { href: 'pickleball-mixer.html', label: '守擂賽' },
+    { href: 'tactical-analysis.html', label: '戰術分析工具' },
+  ];
+
   return (
     <nav className="site-nav" aria-label="主要導覽">
       <h1 className="site-nav-title">
         <a href="index.html">Pickle Today 冒險的起點！</a>
       </h1>
-      <div className="site-nav-links">
-        <a className="site-nav-link" href="quiz.html">匹克職業傾向測驗</a>
-        <a className="site-nav-link" href="inventory.html">裝備背包</a>
-        <a className="site-nav-link" href="course.html">技能修練</a>
-        <a className="site-nav-link" href="friendly-schedule.html">友誼賽程</a>
-        <a className="site-nav-link" href="tips.html">Tips小技巧</a>
-        <a className="site-nav-link" href="pickleball-mixer.html">守擂賽</a>
-        <a className="site-nav-link" href="tactical-analysis.html">戰術分析工具</a>
+      <button
+        type="button"
+        className="site-nav-toggle"
+        onClick={() => setIsNavOpen(true)}
+        aria-expanded={isNavOpen}
+        aria-controls="site-nav-drawer"
+      >
+        選單
+      </button>
+      <div
+        id="site-nav-drawer"
+        className={`site-nav-drawer ${isNavOpen ? 'is-open' : ''}`}
+      >
+        <button
+          type="button"
+          className="site-nav-close"
+          onClick={() => setIsNavOpen(false)}
+          aria-label="關閉導覽選單"
+        >
+          ←
+        </button>
+        <div className="site-nav-links">
+          {navLinks.map((link) => (
+            <a className="site-nav-link" href={link.href} key={link.href} onClick={() => setIsNavOpen(false)}>
+              {link.label}
+            </a>
+          ))}
+        </div>
       </div>
     </nav>
   );
@@ -969,6 +1003,8 @@ function App() {
   const isTacticalPage = window.location.pathname.endsWith('/tactical-analysis.html');
   const isQuizPage = window.location.pathname.endsWith('/quiz.html') || /\/result-[a-z]+\.html$/.test(window.location.pathname);
   const isInventoryPage = window.location.pathname.endsWith('/inventory.html');
+  const isRoadmapPage = window.location.pathname.endsWith('/roadmap.html');
+  const isCoursePage = window.location.pathname.endsWith('/course.html');
 
   const derived = useMemo(() => {
     const opponentBaseDeg = Math.atan2(controls.defender.y - controls.opponent.y, controls.defender.x - controls.opponent.x) * 180 / Math.PI;
@@ -1171,13 +1207,23 @@ function App() {
           {isInventoryPage && (
             <p>選擇背包格中的物品，查看放大圖、推薦職業與商品細節。</p>
           )}
+          {isRoadmapPage && (
+            <p>依照匹克球學習路線建立規則、控球、網前、第三拍與雙打戰術能力。</p>
+          )}
+          {isCoursePage && (
+            <p>四週系統化匹克球基礎奠定班，逐週建立穩定實戰能力。</p>
+          )}
         </div>
 
-        {!isTacticalPage && !isQuizPage && !isInventoryPage && <HomeBanner />}
+        {!isTacticalPage && !isQuizPage && !isInventoryPage && !isRoadmapPage && !isCoursePage && <HomeBanner />}
 
         {isQuizPage && <QuizPage />}
 
         {isInventoryPage && <InventoryPage />}
+
+        {isRoadmapPage && <PickleballRoadmap />}
+
+        {isCoursePage && <CoursePage />}
 
         {isTacticalPage && (
           <div className="content">
