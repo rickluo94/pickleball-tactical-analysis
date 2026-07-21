@@ -119,6 +119,14 @@
     line-height: 1.8;
 }
 
+.footer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
 @media (max-width: 640px) {
     .course-page {
         padding: 20px 12px 34px;

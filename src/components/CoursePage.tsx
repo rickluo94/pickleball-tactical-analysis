@@ -18,7 +18,7 @@ const courseWeeks = [
   },
   {
     title: '第四週：網前丁克球與截擊攻防戰',
-    date: '7 月 27 日 (一)',
+    date: '8 月 03 日 (一)',
     content: '廚房區的細膩網前小球（Dink）拉鋸、突擊截擊技巧，以及網前封網的實戰應用。',
   },
 ];
@@ -30,7 +30,7 @@ function CoursePage() {
         <h2>四週系統化匹克球基礎奠定班</h2>
         <p className="course-subtitle">每週一升級 ‧ 打造穩健實戰力</p>
         <div className="course-tags">
-          <span>2026 年 7 月份課程</span>
+          <span>2026 年 7、8月份課程</span>
           <span>新手的第一個家</span>
           <span>每週開課自由選</span>
         </div>
@@ -50,6 +50,11 @@ function CoursePage() {
           </article>
         ))}
       </section>
+      <footer className="footer-section">
+        <span>
+          ✝※實際上課時間內容依照群組內公告為主※✝
+        </span>
+      </footer>
     </main>
   );
 }
