@@ -17,6 +17,7 @@ export default defineConfig({
         tacticalAnalysis: resolve(__dirname, 'tactical-analysis.html'),
         quiz: resolve(__dirname, 'quiz.html'),
         inventory: resolve(__dirname, 'inventory.html'),
+        pickleballMixer: resolve(__dirname, 'pickleball-mixer.html'),
         roadmap: resolve(__dirname, 'roadmap.html'),
         course: resolve(__dirname, 'course.html'),
         resultBerserker: resolve(__dirname, 'result-berserker.html'),

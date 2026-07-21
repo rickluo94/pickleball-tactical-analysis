@@ -163,47 +163,12 @@
       margin-bottom: 8px;
     }
 
-    .usage-note {
-      margin: -2px 0 8px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 700;
-    }
-
     .usage ol {
       margin: 0;
       padding-left: 22px;
       line-height: 1.7;
       font-size: 14px;
       font-weight: 700;
-    }
-
-    .usage li[data-guide-target] {
-      width: fit-content;
-      border-radius: 8px;
-      padding: 1px 6px;
-      cursor: pointer;
-      transition: background .18s ease, color .18s ease, transform .18s ease;
-    }
-
-    .usage li[data-guide-target]:hover,
-    .usage li[data-guide-target]:focus-visible {
-      background: #dff4e9;
-      color: var(--main);
-      outline: none;
-      transform: translateX(2px);
-    }
-
-    .is-guided {
-      animation: guidePulse 1.25s ease-in-out 2;
-      box-shadow: 0 0 0 4px rgba(242, 184, 75, .35), 0 0 0 8px rgba(47, 111, 94, .2) !important;
-      outline: 3px solid var(--accent) !important;
-      outline-offset: 3px;
-    }
-
-    @keyframes guidePulse {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-2px) scale(1.03); }
     }
 
     .rally-rules {
@@ -433,9 +398,9 @@
 14.A14
         </textarea>
         <div style="margin-top: 10px;">
-          <button id="loadPlayersButton" onclick="loadPlayers()">載入名單</button>
-          <button id="autoStartButton" class="secondary" onclick="autoStart()">開始排場</button>
-          <button id="resetAllButton" class="danger" onclick="resetAll()">重置</button>
+          <button onclick="loadPlayers()">載入名單</button>
+          <button class="secondary" onclick="autoStart()">開始排場</button>
+          <button class="danger" onclick="resetAll()">重置</button>
         </div>
 
         <hr style="border:0;border-top:1px solid var(--line);margin:18px 0;">
@@ -457,16 +422,11 @@
 
           <div class="usage">
             <h3>正確操作流程</h3>
-            <p class="usage-note">PS：內文 [ＸＸＸ] 表示可互動按鈕</p>
             <ol>
-              <li data-guide-target="#nameInput" tabindex="0" role="button">依照格式貼上人員名單</li>
-              <li data-guide-target="#loadPlayersButton" tabindex="0" role="button">[載入名單]</li>
-              <li data-guide-target="#autoStartButton, #resetAllButton" tabindex="0" role="button">[開始排場] 或 [重置]</li>
-              <li data-guide-target=".score-control, .winner-button" tabindex="0" role="button">先按比分[-][＋]或 直接點[A勝]或[B勝]</li>
+              <li>先按比分 ＋。</li>
               <li>到 <span data-winning-score>15</span> 分後，系統判定勝隊。</li>
               <li>敗隊下場。</li>
-              <li data-guide-target="#nextMatchButton" tabindex="0" role="button">再按 [補上下一場對手]，才會補新的挑戰隊。</li>
-              <li data-guide-target="#shuffleQueueButton" tabindex="0" role="button">(可選用) [等待區洗牌]</li>
+              <li>再按「補上下一場對手」，才會補新的挑戰隊。</li>
             </ol>
           </div>
 
@@ -496,10 +456,10 @@
               </div>
               <div id="teamAPlayers" class="players">尚未排定</div>
               <div class="score">
-                <button class="score-control" onclick="changeScore('A', -1)">−</button>
+                <button onclick="changeScore('A', -1)">−</button>
                 <strong id="scoreA">0</strong>
-                <button class="score-control" onclick="changeScore('A', 1)">＋</button>
-                <button class="warning winner-button" onclick="declareWinner('A')">A 勝</button>
+                <button onclick="changeScore('A', 1)">＋</button>
+                <button class="warning" onclick="declareWinner('A')">A 勝</button>
               </div>
             </div>
 
@@ -510,16 +470,16 @@
               </div>
               <div id="teamBPlayers" class="players">尚未排定</div>
               <div class="score">
-                <button class="score-control" onclick="changeScore('B', -1)">−</button>
+                <button onclick="changeScore('B', -1)">−</button>
                 <strong id="scoreB">0</strong>
-                <button class="score-control" onclick="changeScore('B', 1)">＋</button>
-                <button class="warning winner-button" onclick="declareWinner('B')">B 勝</button>
+                <button onclick="changeScore('B', 1)">＋</button>
+                <button class="warning" onclick="declareWinner('B')">B 勝</button>
               </div>
             </div>
           </div>
 
-          <button id="nextMatchButton" onclick="nextMatch()">補上下一場對手</button>
-          <button id="shuffleQueueButton" class="secondary" onclick="shuffleQueue()">等待區洗牌</button>
+          <button onclick="nextMatch()">補上下一場對手</button>
+          <button class="secondary" onclick="shuffleQueue()">等待區洗牌</button>
         </section>
 
         <section class="lists" style="margin-top:20px;">
@@ -559,7 +519,6 @@
     let matchNo = 0;
     let history = [];
     let bannedPairs = new Set();
-    let guideTimer = null;
 
     function parseNames(text) {
       return text
@@ -759,46 +718,6 @@
     function setStatus(text) {
       document.getElementById('status').textContent = text;
     }
-
-    function highlightGuideTargets(selector) {
-      const targets = Array.from(document.querySelectorAll(selector));
-      if (!targets.length) return;
-
-      if (guideTimer) window.clearTimeout(guideTimer);
-      document.querySelectorAll('.is-guided').forEach(element => {
-        element.classList.remove('is-guided');
-      });
-
-      targets.forEach(target => {
-        target.classList.add('is-guided');
-      });
-
-      targets[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-      if (typeof targets[0].focus === 'function') {
-        window.setTimeout(() => targets[0].focus({ preventScroll: true }), 280);
-      }
-
-      guideTimer = window.setTimeout(() => {
-        targets.forEach(target => {
-          target.classList.remove('is-guided');
-        });
-        guideTimer = null;
-      }, 2600);
-    }
-
-    document.querySelectorAll('.usage li[data-guide-target]').forEach(item => {
-      item.addEventListener('click', () => {
-        highlightGuideTargets(item.dataset.guideTarget);
-      });
-
-      item.addEventListener('keydown', event => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          highlightGuideTargets(item.dataset.guideTarget);
-        }
-      });
-    });
 
     function render() {
       document.querySelectorAll('[data-winning-score]').forEach(element => {

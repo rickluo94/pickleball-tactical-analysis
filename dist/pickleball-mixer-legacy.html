@@ -171,6 +171,39 @@
       font-weight: 700;
     }
 
+    .rally-rules {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .rally-rules h3 {
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    .rally-rule-item {
+      border: 1px solid #d8eadf;
+      border-radius: 16px;
+      padding: 14px 16px;
+      background: #fbfffc;
+    }
+
+    .rally-rule-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--main);
+      font-size: 15px;
+    }
+
+    .rally-rule-item p {
+      margin: 0;
+      color: #43504b;
+      line-height: 1.7;
+      font-size: 14px;
+      font-weight: 650;
+    }
+
     .court {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -342,7 +375,7 @@
     </nav>
 
     <section class="hero">
-      <p>落地得分制｜5 分獲勝｜勝隊留場｜連勝 2 場強制下場並拆散配對</p>
+      <p>落地得分制｜<span data-winning-score>15</span> 分獲勝｜勝隊留場｜連勝 2 場強制下場並拆散配對</p>
     </section>
 
     <div class="grid">
@@ -381,8 +414,8 @@
       <main>
         <section class="card">
           <div class="rules">
-            <div class="rule">🎾 每球得分</div>
-            <div class="rule">🏁 先到 5 分勝</div>
+            <div class="rule">🎾 落地得分制</div>
+            <div class="rule">🏁 先到 <span data-winning-score>15</span> 分勝</div>
             <div class="rule">👑 勝隊留場</div>
             <div class="rule">🔀 二連勝拆隊</div>
           </div>
@@ -391,11 +424,27 @@
             <h3>正確操作流程</h3>
             <ol>
               <li>先按比分 ＋。</li>
-              <li>到 5 分後，系統判定勝隊。</li>
+              <li>到 <span data-winning-score>15</span> 分後，系統判定勝隊。</li>
               <li>敗隊下場。</li>
-              <li>再按「下一場」，才會補新的挑戰隊。</li>
+              <li>再按「補上下一場對手」，才會補新的挑戰隊。</li>
             </ol>
           </div>
+
+          <section class="rally-rules" aria-label="落地得分制詳細介紹">
+            <h3>落地得分制詳細介紹</h3>
+            <div class="rally-rule-item">
+              <strong>1. 得分方式</strong>
+              <p>每一回合都會有人得到 1 分。無論是發球方或接發球方，只要贏下該回合都會加分。</p>
+            </div>
+            <div class="rally-rule-item">
+              <strong>2. 發球順序常見做法</strong>
+              <p>落地得分制有不同版本；在 USA Pickleball 的選用規則精神中，常見做法是一隊通常只安排一位發球者，輸了回合就換到對方發球。這樣可以讓節奏更快、比分更緊湊，也讓時間更容易預估。</p>
+            </div>
+            <div class="rally-rule-item">
+              <strong>3. 比賽結束條件常見選項</strong>
+              <p>落地得分制常用局數與分數會依主辦單位調整，例如一隊先到 <span data-winning-score>15</span> 分獲勝。</p>
+            </div>
+          </section>
 
           <div id="status" class="status">請先載入名單，然後點「開始排場」。</div>
 
@@ -429,7 +478,7 @@
             </div>
           </div>
 
-          <button onclick="nextMatch()">下一場</button>
+          <button onclick="nextMatch()">補上下一場對手</button>
           <button class="secondary" onclick="shuffleQueue()">等待區洗牌</button>
         </section>
 
@@ -458,6 +507,7 @@
   </div>
 
   <script>
+    const winningScore = 15;
     let players = [];
     let queue = [];
     let teamA = [];
@@ -639,10 +689,10 @@
     function changeScore(side, delta) {
       if (side === 'A') {
         scoreA = Math.max(0, scoreA + delta);
-        if (scoreA >= 5) declareWinner('A');
+        if (scoreA >= winningScore) declareWinner('A');
       } else {
         scoreB = Math.max(0, scoreB + delta);
-        if (scoreB >= 5) declareWinner('B');
+        if (scoreB >= winningScore) declareWinner('B');
       }
       render();
     }
@@ -670,6 +720,10 @@
     }
 
     function render() {
+      document.querySelectorAll('[data-winning-score]').forEach(element => {
+        element.textContent = winningScore;
+      });
+
       document.getElementById('teamAPlayers').textContent = teamA.length ? teamA.join(' ＋ ') : '等待排定';
       document.getElementById('teamBPlayers').textContent = teamB.length ? teamB.join(' ＋ ') : '等待排定';
 

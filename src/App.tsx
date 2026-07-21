@@ -213,7 +213,7 @@ function SiteNav() {
   const navLinks = [
     { href: 'quiz.html', label: '匹克職業傾向測驗' },
     { href: 'inventory.html', label: '裝備背包' },
-    { href: 'course.html', label: '技能修練' },
+    { href: 'course.html', label: '技能修練班' },
     { href: 'roadmap.html', label: '學習路線' },
     { href: 'friendly-schedule.html', label: '友誼賽程' },
     { href: 'tips.html', label: 'Tips小技巧' },
