@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CoursePage from './components/CoursePage';
 import PickleballRoadmap from './components/PickleballRoadmap';
+import PickleballMixerPage from './components/PickleballMixerPage';
 import ProfileCard from './components/ProfileCard';
 
 type Point = {
@@ -217,7 +218,7 @@ function SiteNav() {
     { href: 'roadmap.html', label: '學習路線' },
     { href: 'friendly-schedule.html', label: '友誼賽程' },
     { href: 'tips.html', label: 'Tips小技巧' },
-    { href: 'pickleball-mixer.html', label: '守擂賽' },
+    { href: 'pickleball-mixer.html', label: '臨打配對器' },
     { href: 'tactical-analysis.html', label: '戰術分析工具' },
   ];
 
@@ -1005,6 +1006,7 @@ function App() {
   const isInventoryPage = window.location.pathname.endsWith('/inventory.html');
   const isRoadmapPage = window.location.pathname.endsWith('/roadmap.html');
   const isCoursePage = window.location.pathname.endsWith('/course.html');
+  const isMixerPage = window.location.pathname.endsWith('/pickleball-mixer.html');
 
   const derived = useMemo(() => {
     const opponentBaseDeg = Math.atan2(controls.defender.y - controls.opponent.y, controls.defender.x - controls.opponent.x) * 180 / Math.PI;
@@ -1213,9 +1215,12 @@ function App() {
           {isCoursePage && (
             <p>四週系統化匹克球基礎奠定班，逐週建立穩定實戰能力。</p>
           )}
+          {isMixerPage && (
+            <p>用落地得分制快速安排臨打配對、勝隊留場與等待區輪替。</p>
+          )}
         </div>
 
-        {!isTacticalPage && !isQuizPage && !isInventoryPage && !isRoadmapPage && !isCoursePage && <HomeBanner />}
+        {!isTacticalPage && !isQuizPage && !isInventoryPage && !isRoadmapPage && !isCoursePage && !isMixerPage && <HomeBanner />}
 
         {isQuizPage && <QuizPage />}
 
@@ -1224,6 +1229,8 @@ function App() {
         {isRoadmapPage && <PickleballRoadmap />}
 
         {isCoursePage && <CoursePage />}
+
+        {isMixerPage && <PickleballMixerPage />}
 
         {isTacticalPage && (
           <div className="content">
