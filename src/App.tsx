@@ -213,7 +213,6 @@ function SiteNav() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navLinks = [
     { href: 'quiz.html', label: '匹克職業傾向測驗' },
-    { href: 'inventory.html', label: '裝備背包' },
     { href: 'course.html', label: '技能修練班' },
     { href: 'roadmap.html', label: '學習路線' },
     { href: 'friendly-schedule.html', label: '友誼賽程' },
