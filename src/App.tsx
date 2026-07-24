@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import CoursePage from './components/CoursePage';
 import PickleballRoadmap from './components/PickleballRoadmap';
 import PickleballMixerPage from './components/PickleballMixerPage';
+import PickleAwardsRankingPage from './components/PickleAwardsRankingPage';
 import ProfileCard from './components/ProfileCard';
 
 type Point = {
@@ -213,12 +214,12 @@ function SiteNav() {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const navLinks = [
     { href: 'quiz.html', label: '匹克職業傾向測驗' },
-    { href: 'course.html', label: '技能修練班' },
     { href: 'roadmap.html', label: '學習路線' },
-    { href: 'friendly-schedule.html', label: '友誼賽程' },
     { href: 'tips.html', label: 'Tips小技巧' },
     { href: 'pickleball-mixer.html', label: '臨打配對器' },
     { href: 'tactical-analysis.html', label: '戰術分析工具' },
+    { href: 'friendly-schedule.html', label: '友誼賽程' },
+    { href: 'awards-ranking.html', label: '趣味獎項排行' },
   ];
 
   return (
@@ -858,18 +859,10 @@ function QuizPage() {
 
 function HomeBanner() {
   return (
-    <>
-      <picture className="home-banner">
-        <source media="(max-width: 640px)" srcSet={assetPath('banner_phone.webp')} />
-        <img src={assetPath('banner_web.webp')} alt="Pickle Today" />
-      </picture>
-      <section className="home-contact" aria-label="聯絡資訊">
-        <span>聯絡資訊</span>
-        <a href="https://www.threads.com/@sanmo_daily" target="_blank" rel="noreferrer">
-          @sanmo_daily
-        </a>
-      </section>
-    </>
+    <picture className="home-banner">
+      <source media="(max-width: 640px)" srcSet={assetPath('banner_phone.webp')} />
+      <img src={assetPath('banner_web.webp')} alt="Pickle Today" />
+    </picture>
   );
 }
 
@@ -1006,6 +999,7 @@ function App() {
   const isRoadmapPage = window.location.pathname.endsWith('/roadmap.html');
   const isCoursePage = window.location.pathname.endsWith('/course.html');
   const isMixerPage = window.location.pathname.endsWith('/pickleball-mixer.html');
+  const isAwardsRankingPage = window.location.pathname.endsWith('/awards-ranking.html');
 
   const derived = useMemo(() => {
     const opponentBaseDeg = Math.atan2(controls.defender.y - controls.opponent.y, controls.defender.x - controls.opponent.x) * 180 / Math.PI;
@@ -1217,9 +1211,12 @@ function App() {
           {isMixerPage && (
             <p>用落地得分制快速安排臨打配對、勝隊留場與等待區輪替。</p>
           )}
+          {isAwardsRankingPage && (
+            <p>查看 Pickle Today 趣味獎項票選結果與各獎項得票排行。</p>
+          )}
         </div>
 
-        {!isTacticalPage && !isQuizPage && !isInventoryPage && !isRoadmapPage && !isCoursePage && !isMixerPage && <HomeBanner />}
+        {!isTacticalPage && !isQuizPage && !isInventoryPage && !isRoadmapPage && !isCoursePage && !isMixerPage && !isAwardsRankingPage && <HomeBanner />}
 
         {isQuizPage && <QuizPage />}
 
@@ -1230,6 +1227,8 @@ function App() {
         {isCoursePage && <CoursePage />}
 
         {isMixerPage && <PickleballMixerPage />}
+
+        {isAwardsRankingPage && <PickleAwardsRankingPage />}
 
         {isTacticalPage && (
           <div className="content">
@@ -1372,6 +1371,13 @@ function App() {
           </aside>
         </div>
         )}
+        <footer className="site-footer-credit">
+          <span>聯絡資訊</span>
+          <a href="https://www.threads.com/@sanmo_daily" target="_blank" rel="noreferrer">
+            @sanmo_daily
+          </a>
+          <span>Create By SF39 Studio CO., LTD.</span>
+        </footer>
       </div>
     </div>
   );

@@ -96,22 +96,26 @@ body{
     width:100%;
     height:auto;
 }
-.home-contact{
+.site-footer-credit{
     display:flex;
-    justify-content:center;
     align-items:center;
-    gap:10px;
-    padding:18px 20px 22px;
-    border-top:1px solid #e5e7eb;
-    color:#667085;
-    font-size:14px;
-    font-weight:800;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:6px 12px;
+    padding:14px 20px 18px;
+    border-top:1px solid #eef2f7;
+    color:#98a2b3;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.02em;
+    text-align:center;
 }
-.home-contact a{
-    color:#2563eb;
+.site-footer-credit a{
+    color:#667085;
     text-decoration:none;
 }
-.home-contact a:hover{
+.site-footer-credit a:hover{
+    color:#2563eb;
     text-decoration:underline;
 }
 .inventory-page{

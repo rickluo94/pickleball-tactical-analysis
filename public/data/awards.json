@@ -1,0 +1,102 @@
+{
+  "title": "Pickle Today 趣味獎項排行榜",
+  "subtitle": "根據目前表單回覆統計",
+  "updatedAt": "2026-07-20 23:18:23.553",
+  "totalResponses": 4,
+  "tieBreakRule": {
+    "title": "平手遞補規則",
+    "description": "票數相同時，依表單時間戳記排序，取最早提交回覆中所選擇的候選人作為代表。",
+    "firstSubmittedAt": "2026-07-20 23:18:23.553",
+    "firstCandidate": "Abing",
+    "affectedAwards": [
+      "神級救球獎",
+      "最佳隊友獎",
+      "永遠不累獎"
+    ]
+  },
+  "awards": [
+    {
+      "id": "best-smile",
+      "name": "最佳笑容獎",
+      "description": "一上場就讓整個球場氣氛變好的笑容代表。",
+      "icon": "☀",
+      "totalVotes": 4,
+      "winner": "Abing",
+      "winnerVotes": 2,
+      "winnerReason": "獲得最高票 2 票",
+      "isTie": false,
+      "votes": [
+        { "name": "Abing", "votes": 2, "order": 1 },
+        { "name": "凱特", "votes": 1, "order": 2 },
+        { "name": "夢夢", "votes": 1, "order": 3 }
+      ]
+    },
+    {
+      "id": "best-save",
+      "name": "神級救球獎",
+      "description": "總能在大家以為來不及時，把球成功救回來。",
+      "icon": "↗",
+      "totalVotes": 4,
+      "winner": "Abing",
+      "winnerVotes": 1,
+      "winnerReason": "票數皆為 1 票，依最早表單回覆順位選出",
+      "isTie": true,
+      "votes": [
+        { "name": "Abing", "votes": 1, "order": 1 },
+        { "name": "Spookie", "votes": 1, "order": 2 },
+        { "name": "凱特", "votes": 1, "order": 3 },
+        { "name": "夢夢", "votes": 1, "order": 4 }
+      ]
+    },
+    {
+      "id": "best-teammate",
+      "name": "最佳隊友獎",
+      "description": "讓人最安心、最想再次組隊的球場夥伴。",
+      "icon": "◆",
+      "totalVotes": 4,
+      "winner": "Abing",
+      "winnerVotes": 1,
+      "winnerReason": "票數皆為 1 票，依最早表單回覆順位選出",
+      "isTie": true,
+      "votes": [
+        { "name": "Abing", "votes": 1, "order": 1 },
+        { "name": "尼克", "votes": 1, "order": 2 },
+        { "name": "Hank", "votes": 1, "order": 3 },
+        { "name": "夢夢", "votes": 1, "order": 4 }
+      ]
+    },
+    {
+      "id": "best-support",
+      "name": "最佳情緒價值獎",
+      "description": "不只一起打球，也總是能給隊友鼓勵與支持。",
+      "icon": "♥",
+      "totalVotes": 4,
+      "winner": "Abing",
+      "winnerVotes": 2,
+      "winnerReason": "獲得最高票 2 票",
+      "isTie": false,
+      "votes": [
+        { "name": "Abing", "votes": 2, "order": 1 },
+        { "name": "Xi", "votes": 1, "order": 2 },
+        { "name": "夢夢", "votes": 1, "order": 3 }
+      ]
+    },
+    {
+      "id": "never-tired",
+      "name": "永遠不累獎",
+      "description": "不管打了幾場，看起來都還是非常輕鬆。",
+      "icon": "∞",
+      "totalVotes": 4,
+      "winner": "Abing",
+      "winnerVotes": 1,
+      "winnerReason": "票數皆為 1 票，依最早表單回覆順位選出",
+      "isTie": true,
+      "votes": [
+        { "name": "Abing", "votes": 1, "order": 1 },
+        { "name": "欣誼", "votes": 1, "order": 2 },
+        { "name": "小郭", "votes": 1, "order": 3 },
+        { "name": "夢夢", "votes": 1, "order": 4 }
+      ]
+    }
+  ]
+}

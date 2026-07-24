@@ -20,6 +20,7 @@ export default defineConfig({
         pickleballMixer: resolve(__dirname, 'pickleball-mixer.html'),
         roadmap: resolve(__dirname, 'roadmap.html'),
         course: resolve(__dirname, 'course.html'),
+        awardsRanking: resolve(__dirname, 'awards-ranking.html'),
         resultBerserker: resolve(__dirname, 'result-berserker.html'),
         resultPaladin: resolve(__dirname, 'result-paladin.html'),
         resultMage: resolve(__dirname, 'result-mage.html'),
