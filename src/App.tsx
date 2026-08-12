@@ -3,6 +3,8 @@ import CoursePage from './components/CoursePage';
 import PickleballRoadmap from './components/PickleballRoadmap';
 import PickleballMixerPage from './components/PickleballMixerPage';
 import PickleAwardsRankingPage from './components/PickleAwardsRankingPage';
+import PickleTodayCalendarPage from './components/PickleTodayCalendarPage';
+import PickleballConcepts101Page from './components/PickleballConcepts101Page';
 import ProfileCard from './components/ProfileCard';
 
 type Point = {
@@ -215,11 +217,13 @@ function SiteNav() {
   const navLinks = [
     { href: 'quiz.html', label: '匹克職業傾向測驗' },
     { href: 'roadmap.html', label: '學習路線' },
+    { href: 'concepts-101.html', label: '觀念101' },
     { href: 'tips.html', label: 'Tips小技巧' },
     { href: 'pickleball-mixer.html', label: '臨打配對器' },
     { href: 'tactical-analysis.html', label: '戰術分析工具' },
     { href: 'friendly-schedule.html', label: '友誼賽程' },
     { href: 'awards-ranking.html', label: '趣味獎項排行' },
+    { href: 'calendar.html', label: '活動日曆' },
   ];
 
   return (
@@ -1000,6 +1004,8 @@ function App() {
   const isCoursePage = window.location.pathname.endsWith('/course.html');
   const isMixerPage = window.location.pathname.endsWith('/pickleball-mixer.html');
   const isAwardsRankingPage = window.location.pathname.endsWith('/awards-ranking.html');
+  const isCalendarPage = window.location.pathname.endsWith('/calendar.html');
+  const isConcepts101Page = window.location.pathname.endsWith('/concepts-101.html');
 
   const derived = useMemo(() => {
     const opponentBaseDeg = Math.atan2(controls.defender.y - controls.opponent.y, controls.defender.x - controls.opponent.x) * 180 / Math.PI;
@@ -1214,9 +1220,15 @@ function App() {
           {isAwardsRankingPage && (
             <p>查看 Pickle Today 趣味獎項票選結果與各獎項得票排行。</p>
           )}
+          {isCalendarPage && (
+            <p>查看近期匹克球課程、臨打、體驗與交流活動。</p>
+          )}
+          {isConcepts101Page && (
+            <p>用短篇文章建立匹克球實戰觀念，從新手常見情境開始累積。</p>
+          )}
         </div>
 
-        {!isTacticalPage && !isQuizPage && !isInventoryPage && !isRoadmapPage && !isCoursePage && !isMixerPage && !isAwardsRankingPage && <HomeBanner />}
+        {!isTacticalPage && !isQuizPage && !isInventoryPage && !isRoadmapPage && !isCoursePage && !isMixerPage && !isAwardsRankingPage && !isCalendarPage && !isConcepts101Page && <HomeBanner />}
 
         {isQuizPage && <QuizPage />}
 
@@ -1229,6 +1241,10 @@ function App() {
         {isMixerPage && <PickleballMixerPage />}
 
         {isAwardsRankingPage && <PickleAwardsRankingPage />}
+
+        {isCalendarPage && <PickleTodayCalendarPage />}
+
+        {isConcepts101Page && <PickleballConcepts101Page />}
 
         {isTacticalPage && (
           <div className="content">
