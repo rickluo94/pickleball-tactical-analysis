@@ -46,6 +46,10 @@ function formatFooter(article: ConceptArticle) {
   return `${article.episode}｜${article.level}｜${article.topic}`;
 }
 
+function conceptArticlePath(article: ConceptArticle) {
+  return `${import.meta.env.BASE_URL}concepts/${article.id.toLowerCase()}.html`;
+}
+
 function ConceptArticleCard({ article }: { article: ConceptArticle }) {
   return (
     <article className="concepts-article" id={article.id}>
@@ -55,7 +59,9 @@ function ConceptArticleCard({ article }: { article: ConceptArticle }) {
         <span>{article.topic}</span>
       </div>
 
-      <h2>{article.episode}｜{article.title}</h2>
+      <h2>
+        <a href={conceptArticlePath(article)}>{article.episode}｜{article.title}</a>
+      </h2>
 
       <div className="concepts-body">
         {article.body.map((paragraph, index) => (
@@ -85,6 +91,10 @@ function ConceptsListPage({ data }: { data: ConceptsData }) {
   }, [data.articles, sortDirection]);
   const sortLabel = sortDirection === 'asc' ? '正序' : '倒序';
 
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   return (
     <main className="concepts-page">
       <section className="concepts-hero">
@@ -111,7 +121,7 @@ function ConceptsListPage({ data }: { data: ConceptsData }) {
           </button>
           <nav aria-label="觀念101文章索引">
             {articles.map((article) => (
-              <a href={`#${article.id}`} key={article.id}>
+              <a href={conceptArticlePath(article)} key={article.id}>
                 <span>{article.episode}</span>
                 {article.topic}
               </a>
@@ -125,6 +135,15 @@ function ConceptsListPage({ data }: { data: ConceptsData }) {
           ))}
         </div>
       </section>
+
+      <button
+        type="button"
+        className="concepts-scroll-top"
+        onClick={scrollToTop}
+        aria-label="回到頁面最上方"
+      >
+        ↑
+      </button>
     </main>
   );
 }

@@ -9,7 +9,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "generate:concepts": "node scripts/generate-concept-pages.mjs",
+    "build": "npm run generate:concepts && tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
