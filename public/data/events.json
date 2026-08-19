@@ -83,8 +83,8 @@
     "level": "2.0 - 3.0",
     "price": 250,
     "maxPlayers": 8,
-    "currentPlayers": 2,
-    "status": "open",
+    "currentPlayers": 8,
+    "status": "full",
     "description": "一面冷氣場，免費借用球拍，人來就好。上場規則採排拍子上場、發球得分制。借拍請於報名時備註。",
     "registrationUrl": "https://line.me/R/ti/g/7mZc2--FMC"
   },
